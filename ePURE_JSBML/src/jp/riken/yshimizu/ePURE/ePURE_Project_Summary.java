@@ -23,6 +23,9 @@ public class ePURE_Project_Summary {
 	private HashMap<String, ArrayList<String>> codon_vs_tRNA_map;
 	private ArrayList<String> codon_array;
 	
+	private int SBML_level = 2;
+	private int SBML_version = 4;
+	
 	/*---------------------------------------------------------
 	 * constructor
 	---------------------------------------------------------*/
@@ -253,21 +256,6 @@ public class ePURE_Project_Summary {
 		
 	}
 	
-	private boolean sequence_check(String str){
-		
-		for(int i=0;i<str.length();i++){
-			if(str.charAt(i)!='A'&str.charAt(i)!='g'
-				&str.charAt(i)!='c'&str.charAt(i)!='t'
-				&str.charAt(i)!='A'&str.charAt(i)!='G'
-				&str.charAt(i)!='C'&str.charAt(i)!='T'
-				&str.charAt(i)!='U'&str.charAt(i)!='u'){
-				return false;
-			}
-		   		
-		}
-		return true;
-	}
-	
 	private void set_maps(String conf_file){
 		
 		BufferedReader reader = null;
@@ -278,17 +266,12 @@ public class ePURE_Project_Summary {
 			
 			while(true){
 				str = reader.readLine();
+				
 				if(str==null){
 					break;
 				}
 				
-				while(true){
-					if(str.contains(" ")){
-						str = str.replace(" ", "");
-					}else{
-						break;
-					}
-				}
+				str = str.replace(" ", "");
 				
 				if(str.contains("=")){
 					String[] s = str.split("=");
@@ -348,6 +331,23 @@ public class ePURE_Project_Summary {
 		
 	}
 	
+	private boolean sequence_check(String str){
+		
+		for(int i=0;i<str.length();i++){
+			if(str.charAt(i)!='A'&str.charAt(i)!='g'
+				&str.charAt(i)!='c'&str.charAt(i)!='t'
+				&str.charAt(i)!='A'&str.charAt(i)!='G'
+				&str.charAt(i)!='C'&str.charAt(i)!='T'
+				&str.charAt(i)!='U'&str.charAt(i)!='u'){
+				return false;
+			}
+		   		
+		}
+		return true;
+	}
+	
+	
+	
 	/*---------------------------------------------------------
 	 * public method
 	---------------------------------------------------------*/
@@ -382,6 +382,14 @@ public class ePURE_Project_Summary {
 	
 	public ArrayList<String> get_codon_array(){
 		return codon_array;
+	}
+	
+	public int get_SBML_leve(){
+		return SBML_level;
+	}
+	
+	public int get_SBML_version(){
+		return SBML_version;
 	}
 	
 	public void update_aa_map(String key, boolean flag){

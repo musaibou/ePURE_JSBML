@@ -89,7 +89,7 @@ public class SBML_Generator {
 					file_ostream.close();
 				}
 			}catch(IOException e){
-				System.out.println("some errors");
+				System.out.println("some errors1");
 			}
 		}
 		
