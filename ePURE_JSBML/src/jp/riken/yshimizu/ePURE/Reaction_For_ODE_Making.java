@@ -17,8 +17,8 @@ public class Reaction_For_ODE_Making {
 	
 	public Reaction_For_ODE_Making(){
 		
-		array_reaction = new ArrayList<String>();
-		array_math = new ArrayList<String>();
+		array_reaction = new ArrayList<>();
+		array_math = new ArrayList<>();
 		
 	}
 	

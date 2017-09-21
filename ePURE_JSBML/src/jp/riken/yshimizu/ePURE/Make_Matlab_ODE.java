@@ -1,8 +1,10 @@
 package jp.riken.yshimizu.ePURE;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Date;
 
 import javax.xml.stream.XMLStreamException;
@@ -15,9 +17,7 @@ public class Make_Matlab_ODE {
 	 * private field
 	---------------------------------------------------------*/
 	
-	private String sbml_file;
 	private String model_name;
-	private String output_file;
 	
 	//parameters below are provided by Merge_Models class
 	private static String default_parameter_name = "k1";
@@ -36,16 +36,15 @@ public class Make_Matlab_ODE {
 	 * constructor
 	---------------------------------------------------------*/
 	
-	public Make_Matlab_ODE(String sbml_file) {
+	public Make_Matlab_ODE(String sbml_file_contents) {
 		
-		this.sbml_file = sbml_file;
 		reader = new SBMLReader();
 		
 		state = new State_For_ODE_Making();
 		param = new Param_For_ODE_Making();
 		reaction = new Reaction_For_ODE_Making();
 		
-		init();
+		init(sbml_file_contents);
 		
 	}
 	
@@ -53,13 +52,15 @@ public class Make_Matlab_ODE {
 	 * public method
 	---------------------------------------------------------*/
 	
-	public void execute(){
+	public ByteArrayOutputStream execute(){
+		
+		BufferedWriter writer = null;
+		ByteArrayOutputStream byte_ostream = new ByteArrayOutputStream();
 		
 		StringBuilder sb =new StringBuilder();
 		
-		BufferedWriter writer = null;
 		try{
-			writer = new BufferedWriter(new FileWriter(output_file));
+			writer = new BufferedWriter(new OutputStreamWriter(byte_ostream));
 			
 			write_function_definition(sb);
 			write_argument_handling(sb);
@@ -69,13 +70,27 @@ public class Make_Matlab_ODE {
 			
 			writer.write(sb.toString());
 			
-			//finalizing..
 			writer.flush();
-			writer.close();
 			
-		} catch (IOException e){
-			System.out.println("Could not save. There might be some errors.");
+		} catch (FileNotFoundException e) {
+			System.out.println("some errors");
+		} catch (IOException e) {
+			System.out.println("some errors");
+		} finally {
+			try {
+				if(writer!=null){
+					writer.flush();
+					writer.close();
+				}
+				if(byte_ostream!=null){
+					byte_ostream.close();
+				}
+			} catch (IOException e) {
+				System.out.println("some errors");
+			}
 		}
+		
+		return byte_ostream;
 		
 	}
 	
@@ -83,29 +98,26 @@ public class Make_Matlab_ODE {
 	 * private method
 	---------------------------------------------------------*/
 	
-	private void init(){
+	private void init(String sbml_file_contents){
 		
 		System.out.println("Initializing ...");
 		System.out.println();
 		
 		//solve name
-		if(sbml_file.endsWith(".xml")){
-			model_name = this.sbml_file.substring(0, sbml_file.length()-4);
+		/*if(xml_file_name.endsWith(".xml")){
+			model_name = this.xml_file_name.substring(0, xml_file_name.length()-4);
 		} else{
-			model_name = this.sbml_file;
-		}
+			model_name = this.xml_file_name;
+		}*/
 		
 		try{
-			model = reader.readSBML(sbml_file).getModel();
-		}catch(IOException e){
-			System.out.println("some errors");
+			model = reader.readSBMLFromString(sbml_file_contents).getModel();
 		}catch(XMLStreamException e){
 			System.out.println("some errors");
 		}
 		if(model.getName()!=model_name){
 			model_name = model.getName();
 		}
-		output_file = model_name + ".m";
 		
 		//input state
 		ListOf<Species> ls_species = model.getListOfSpecies();

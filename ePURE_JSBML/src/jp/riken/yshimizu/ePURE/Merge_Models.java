@@ -1,11 +1,15 @@
 package jp.riken.yshimizu.ePURE;
 
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -18,7 +22,9 @@ public class Merge_Models {
 	---------------------------------------------------------*/
 	
 	private String merged_model_ID;
-	private String[] sbml_files;
+	
+	private ZipFile zip_file = null;
+	
 	private int SBML_level;
 	private int SBML_version;
 	
@@ -27,12 +33,15 @@ public class Merge_Models {
 	private static double default_parameter_value = 1;
 	private static String default_compartment_ID = "default";
 	
-	private SBMLReader reader;
-	private SBMLWriter writer;
-	private SBMLDocument document;
 	private SBMLDocument output_document;
 	private Model output_model;
 	private Compartment compartment;
+	
+	private long pre_number_of_species;
+	private long pre_number_of_reaction;
+	private LinkedHashMap<String, Species> species_map = new LinkedHashMap<String, Species>();
+	private LinkedHashMap<String, Reaction> reaction_map = new LinkedHashMap<String, Reaction>();
+	private long ID_number;
 	
 	private String error_result;
 	
@@ -40,17 +49,14 @@ public class Merge_Models {
 	 * constructor
 	---------------------------------------------------------*/
 	
-	public Merge_Models(String merged_model_ID, String[] sbml_files, int SBML_level, int SBML_version){
+	public Merge_Models(String merged_model_ID, ZipFile zip_file, int SBML_level, int SBML_version){
+		
+		this.zip_file = zip_file;
 		
 		this.merged_model_ID = merged_model_ID;
-		this.sbml_files = sbml_files;
 		
 		this.SBML_level = SBML_level;
 		this.SBML_version = SBML_version;
-		
-		reader = new SBMLReader();
-		writer = new SBMLWriter();
-		document = new SBMLDocument();
 		
 		output_document = new SBMLDocument(SBML_level, SBML_version);
 		output_model = output_document.createModel(this.merged_model_ID);
@@ -63,80 +69,51 @@ public class Merge_Models {
 		compartment.setUnits("volume");
 		compartment.setConstant(true);
 		
+		pre_number_of_species = 0;
+		pre_number_of_reaction = 0;
+		
+		ID_number = 0;
+		
 	}
 	
 	/*---------------------------------------------------------
 	 * public method
 	---------------------------------------------------------*/
 	
-	public boolean execute(){
+	public ByteArrayOutputStream execute(){
 		
-		if(error_check() != true) return false;
+		SBMLReader reader = new SBMLReader();
+		SBMLWriter writer = new SBMLWriter();
 		
-		LinkedHashMap<String, Species> species_map = new LinkedHashMap<String, Species>();
-		LinkedHashMap<String, Reaction> reaction_map = new LinkedHashMap<String, Reaction>();
-		long ID_number = 0;
+		ByteArrayOutputStream byte_ostream = new ByteArrayOutputStream();
 		
-		//Only species and reactions are merged
-		ListOf<Species> ls_species;
-		ListOf<Reaction> ls_reaction;
-		long pre_number_of_species = 0;
-		long pre_number_of_reaction = 0;
-		
-		for(int i = 0; i < sbml_files.length; i++){
+		if(zip_file!=null){
 			
-			System.out.println("Processing " + (i+1) + "/" + sbml_files.length + " files...");
+			int number_of_files = zip_file.size();
+			int count = 0;
+			InputStream istream = null;
+			ZipEntry entry = null;
 			
-			try{
-				document = reader.readSBML(sbml_files[i]);
-			}catch(IOException e){
-				System.out.println("some errors");
-			}catch(XMLStreamException e){
-				System.out.println("some errors");
-			}
+			Enumeration<? extends ZipEntry> entries = zip_file.entries();
 			
-			Model model = document.getModel();
-			ls_species = model.getListOfSpecies();
-			ls_reaction = model.getListOfReactions();
-			pre_number_of_species += ls_species.size();
-			pre_number_of_reaction += ls_reaction.size();
-			
-			//species
-			
-			/*TODO
-			 * 
-			 * species names (==IDs) must be unique even if they form complexes;
-			 * For example, EF-G_GDP and GDP_EF-G can be recognized as same species
-			 * but recognized as different species in this program..
-			 * 
-			 * */
-			
-			for(int j=0;j<ls_species.size();j++){
-				Species spe = ls_species.get(j);
-				String key = spe.getId();
-				if(species_map.containsKey(key)==false){
-					spe = convert_species(spe);
-					species_map.put(spe.getId(), spe);
-				}
-			}
-			
-			//reactions
-			
-			/*TODO
-			 * 
-			 * The same problem as species is inherent..
-			 * 
-			 */
-			
-			for(int j=0;j<ls_reaction.size();j++){
-				Reaction react = ls_reaction.get(j);
-				String key = make_key_name_for_reaction_map(react);
+			while(entries.hasMoreElements()){
 				
-				if(reaction_map.containsKey(key)==false){
-					ID_number++;
-					react = convert_reaction(react, ID_number);
-					reaction_map.put(key, react);
+				count++;
+				System.out.println("Processing " + count + "/" + number_of_files + " files from zip...");
+				
+				entry = entries.nextElement();
+				System.out.println(entry.getName());
+				
+				try {
+					istream = zip_file.getInputStream(entry);
+					append_document_contents(reader.readSBMLFromStream(istream));
+					istream.close();
+				} catch (IOException e) {
+					System.out.println("some errors");
+				} catch (XMLStreamException e) {
+					System.out.println("some errors");
 				}
+				
 			}
 			
 		}
@@ -160,17 +137,22 @@ public class Merge_Models {
 		System.out.println();
 		
 		try{
-			writer.writeSBMLToFile(output_document, merged_model_ID + ".xml");
-		}catch(FileNotFoundException e){
-			System.out.println("some errors");
+			writer.write(output_document, byte_ostream);
 		}catch(XMLStreamException e){
 			System.out.println("some errors");
+		}finally{
+			try{
+				if(byte_ostream!=null){
+					byte_ostream.close();
+				}
+			}catch(IOException e){
+				System.out.println("some errors");
+			}
 		}
 		//writer.writeSBML(output_document, merged_model_ID + ".xml");
 		System.out.println("saved merged model as " + merged_model_ID + ".xml");
-		System.out.println();
 		
-		return true;
+		return byte_ostream;
 		
 	}
 	
@@ -184,7 +166,61 @@ public class Merge_Models {
 	 * private method
 	---------------------------------------------------------*/
 	
-	private boolean error_check(){
+	private void append_document_contents(SBMLDocument doc){
+		
+		//Only species and reactions are merged
+		ListOf<Species> ls_species;
+		ListOf<Reaction> ls_reaction;
+				
+		Model model = doc.getModel();
+		ls_species = model.getListOfSpecies();
+		ls_reaction = model.getListOfReactions();
+		pre_number_of_species += ls_species.size();
+		pre_number_of_reaction += ls_reaction.size();
+		
+		//species
+		
+		/*TODO
+		 * 
+		 * species names (==IDs) must be unique even if they form complexes;
+		 * For example, EF-G_GDP and GDP_EF-G can be recognized as same species
+		 * but recognized as different species in this program..
+		 * 
+		 * */
+		
+		for(int j=0;j<ls_species.size();j++){
+			Species spe = ls_species.get(j);
+			//String key = spe.getId();
+			String key = spe.getName();//170616 modified
+			
+			if(species_map.containsKey(key)==false){
+				spe = convert_species(spe);
+				species_map.put(key, spe);
+			}
+		}
+		
+		//reactions
+		
+		/*TODO
+		 * 
+		 * The same problem as species is inherent..
+		 * 
+		 */
+		
+		for(int j=0;j<ls_reaction.size();j++){
+			Reaction react = ls_reaction.get(j);
+			String key = make_key_name_for_reaction_map(react);
+			
+			if(reaction_map.containsKey(key)==false){
+				ID_number++;
+				react = convert_reaction(react, ID_number);
+				reaction_map.put(key, react);
+			}
+		}
+		
+	}
+	
+	/*private boolean error_check(){
 		
 		//this program requires SBML level 2, version 4
 		if(SBML_level!=2||SBML_version!=4){
@@ -232,14 +268,15 @@ public class Merge_Models {
 			return true;
 		}
 		
-	}
+	}*/
 	
 	private ArrayList<String> sort_list(ListOf<SpeciesReference> list){
 		
 		ArrayList<String> al = new ArrayList<String>();
 		
 		for(int i=0;i<list.size();i++){
-			al.add(list.get(i).getSpecies());
+			//al.add(list.get(i).getSpecies());
+			al.add(list.get(i).getSpeciesInstance().getName());//170616 modified
 		}
 		
 		Collections.sort(al);
@@ -256,13 +293,13 @@ public class Merge_Models {
 		//ArrayList<String> modifiers = sort_list(react.getListOfModifiers());
 		
 		for(int j=0;j<reactants.size();j++){
-			sb.append(reactants.get(j)+"_-_");
+			sb.append(reactants.get(j)+"\t");
 		}
 		
-		sb.append("___");
+		sb.append("\t\t");
 		
 		for(int j=0;j<products.size();j++){
-			sb.append(products.get(j)+"_-_");
+			sb.append(products.get(j)+"\t");
 		}
 		
 		/*sb.append("___");
@@ -279,7 +316,8 @@ public class Merge_Models {
 		
 		Species converted = new Species(SBML_level, SBML_version);
 		
-		converted.setId(original.getId());
+		//converted.setId(original.getId());
+		converted.setId(original.getName());//170616 modified
 		converted.setName(original.getName());
 		converted.setCompartment(compartment.getId());
 		converted.setInitialConcentration(default_initial_conc);
@@ -303,9 +341,13 @@ public class Merge_Models {
 		for(int i=0;i<original.getNumReactants();i++){
 			
 			SpeciesReference orig_sr = original.getReactant(i);
+			Species spe = orig_sr.getSpeciesInstance();//170616 modified
+			spe = convert_species(spe);
 			
 			SpeciesReference sr = new SpeciesReference(SBML_level, SBML_version);
-			sr.setSpecies(orig_sr.getSpecies());
+			//sr.setSpecies(orig_sr.getSpecies());
+			sr.setSpecies(spe);//170616 modified
+			
 			
 			//TODO set mass action related
 			/*try{
@@ -323,9 +365,12 @@ public class Merge_Models {
 		for(int i=0;i<original.getNumProducts();i++){
 			
 			SpeciesReference orig_sr = original.getProduct(i);
+			Species spe = orig_sr.getSpeciesInstance();//170616 modified
+			spe = convert_species(spe);
 			
 			SpeciesReference sr = new SpeciesReference(SBML_level, SBML_version);
-			sr.setSpecies(orig_sr.getSpecies());
+			//sr.setSpecies(orig_sr.getSpecies());
+			sr.setSpecies(spe);//170616 modified
 			
 			//TODO set mass action related
 			/*try{

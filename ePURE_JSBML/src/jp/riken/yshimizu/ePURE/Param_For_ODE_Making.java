@@ -8,7 +8,7 @@ public class Param_For_ODE_Making {
 	 * private field
 	---------------------------------------------------------*/
 	
-	ArrayList<String> array_param;
+	private ArrayList<String> array_param;
 	
 	/*---------------------------------------------------------
 	 * constructor
@@ -16,7 +16,7 @@ public class Param_For_ODE_Making {
 	
 	public Param_For_ODE_Making(){
 		
-		array_param = new ArrayList<String>();
+		array_param = new ArrayList<>();
 		
 	}
 	

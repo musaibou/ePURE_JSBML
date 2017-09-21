@@ -8,7 +8,7 @@ public class State_For_ODE_Making {
 	 * private field
 	---------------------------------------------------------*/
 	
-	ArrayList<String> array_state;
+	private ArrayList<String> array_state;
 	
 	/*---------------------------------------------------------
 	 * constructor
@@ -16,7 +16,7 @@ public class State_For_ODE_Making {
 	
 	public State_For_ODE_Making(){
 		
-		array_state = new ArrayList<String>();
+		array_state = new ArrayList<>();
 		
 	}
 	
