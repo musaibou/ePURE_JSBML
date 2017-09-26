@@ -26,13 +26,13 @@ public class Sequence_Independent_SBML_Generator {
 	 * constructor
 	---------------------------------------------------------*/
 	
-	public Sequence_Independent_SBML_Generator(ePURE_Project_Summary summary, TreeMap<String, byte[]> byte_stream_map){
+	public Sequence_Independent_SBML_Generator(ePURE_Project epure, TreeMap<String, byte[]> byte_stream_map){
 		
-		this.project_name = summary.get_project_name();
+		this.project_name = epure.get_project_name();
 		this.byte_stream_map = byte_stream_map;
 		
-		this.aa_map = summary.get_aa_map();
-		this.tRNA_map = summary.get_tRNA_map();
+		this.aa_map = epure.get_aa_map();
+		this.tRNA_map = epure.get_tRNA_map();
 		
 	}
 	
@@ -42,21 +42,21 @@ public class Sequence_Independent_SBML_Generator {
 	
 	public void execute(){
 		
-		System.out.println("making sequence independent files...");
+		System.out.println("  Making sequence independent files...");
 		
-		process_for_Aminoacylation_A("./BaseFile/Aminoacylation_A_20121220v02.xml", "Aminoacylation_A_aa_");
-		process_for_Aminoacylation_B_or_Elongation_A("./BaseFile/Aminoacylation_B_20121220v03.xml", "Aminoacylation_B_aa_codon_");
-		process_for_Aminoacylation_B_or_Elongation_A("./BaseFile/Elongation_A_20121116v04.xml", "Elongation_A_aa_codon_");
-		process_for_single_file_type_files("./BaseFile/Elongation_B_20121116v03.xml", "Elongation_B_");
-		process_for_single_file_type_files("./BaseFile/EnergyRegeneration_A_20121015v03.xml", "EnergyRegeneration_A_");
-		process_for_single_file_type_files("./BaseFile/EnergyRegeneration_B_20121016v05.xml", "EnergyRegeneration_B_");
-		process_for_single_file_type_files("./BaseFile/EnergyRegeneration_C_20121016v05.xml", "EnergyRegeneration_C_");
-		process_for_single_file_type_files("./BaseFile/EnergyRegeneration_D_20130501v03.xml", "EnergyRegeneration_D_");
-		process_for_single_file_type_files("./BaseFile/FMet_tRNASynthesis_20121015v08.xml", "FMet_tRNASynthesis_");
-		process_for_single_file_type_files("./BaseFile/Initiation_A_20121016v04.xml", "Initiation_A_");
-		process_for_single_file_type_files("./BaseFile/Initiation_B1_20121016v24.xml", "Initiation_B1_");
-		process_for_single_file_type_files("./BaseFile/Initiation_B2_20131105v02.xml", "Initiation_B2_");
-		process_for_single_file_type_files("./BaseFile/SmallMolecules_20130222v03.xml", "SmallMolecules_");
+		process_for_Aminoacylation_A(ePURE_Header.base_Aminoacylation_A, "Aminoacylation_A_aa_");
+		process_for_Aminoacylation_B_or_Elongation_A(ePURE_Header.base_Aminoacylation_B, "Aminoacylation_B_aa_codon_");
+		process_for_Aminoacylation_B_or_Elongation_A(ePURE_Header.base_Elongation_A, "Elongation_A_aa_codon_");
+		process_for_single_file_type_files(ePURE_Header.base_Elongation_B, "Elongation_B_");
+		process_for_single_file_type_files(ePURE_Header.base_EnergyRegeneration_A, "EnergyRegeneration_A_");
+		process_for_single_file_type_files(ePURE_Header.base_EnergyRegeneration_B, "EnergyRegeneration_B_");
+		process_for_single_file_type_files(ePURE_Header.base_EnergyRegeneration_C, "EnergyRegeneration_C_");
+		process_for_single_file_type_files(ePURE_Header.base_EnergyRegeneration_D, "EnergyRegeneration_D_");
+		process_for_single_file_type_files(ePURE_Header.base_FMet_tRNASynthesis, "FMet_tRNASynthesis_");
+		process_for_single_file_type_files(ePURE_Header.base_Initiation_A, "Initiation_A_");
+		process_for_single_file_type_files(ePURE_Header.base_Initiation_B1, "Initiation_B1_");
+		process_for_single_file_type_files(ePURE_Header.base_Initiation_B2, "Initiation_B2_");
+		process_for_single_file_type_files(ePURE_Header.base_SmallMolecules, "SmallMolecules_");
 		
 	}
 	
@@ -109,9 +109,13 @@ public class Sequence_Independent_SBML_Generator {
 			byte_stream_map.put(output_file, byte_ostream.toByteArray());
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("some errors");
+			System.out.println("Could not find the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if(reader != null) {
@@ -125,7 +129,9 @@ public class Sequence_Independent_SBML_Generator {
 					byte_ostream.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		
@@ -187,9 +193,13 @@ public class Sequence_Independent_SBML_Generator {
 			byte_stream_map.put(output_file, byte_ostream.toByteArray());
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("some errors");
+			System.out.println("Could not find the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if(reader != null) {
@@ -203,7 +213,9 @@ public class Sequence_Independent_SBML_Generator {
 					byte_ostream.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		
@@ -249,9 +261,13 @@ public class Sequence_Independent_SBML_Generator {
 			byte_stream_map.put(output_file, byte_ostream.toByteArray());
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("some errors");
+			System.out.println("Could not find the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if(reader != null) {
@@ -265,7 +281,9 @@ public class Sequence_Independent_SBML_Generator {
 					byte_ostream.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		

@@ -29,13 +29,13 @@ public class Sequence_Dependent_SBML_Generator {
 	 * constructor
 	---------------------------------------------------------*/
 	
-	public Sequence_Dependent_SBML_Generator(ePURE_Project_Summary summary, TreeMap<String, byte[]> byte_stream_map) {
+	public Sequence_Dependent_SBML_Generator(ePURE_Project epure, TreeMap<String, byte[]> byte_stream_map) {
 		
-		this.project_name = summary.get_project_name();
+		this.project_name = epure.get_project_name();
 		this.byte_stream_map = byte_stream_map;
 		
-		this.codon_vs_tRNA_map = summary.get_codon_vs_tRNA_map();
-		this.codon_array = summary.get_codon_array();
+		this.codon_vs_tRNA_map = epure.get_codon_vs_tRNA_map();
+		this.codon_array = epure.get_codon_array();
 	}
 	
 	/*---------------------------------------------------------
@@ -44,14 +44,14 @@ public class Sequence_Dependent_SBML_Generator {
 	
 	public void execute(){
 		
-		System.out.println("making sequence dependent files...");
+		System.out.println("  Making sequence dependent files...");
 		
-		process_for_Initiation_C("./BaseFile/Initiation_C_20121016v08.xml", "Initiation_C_");
-		process_for_Termination_A_or_B("./BaseFile/Termination_A_20121220v04.xml", "Termination_A_AAAABBB_RFx_CCCDDD_");
-		process_for_Termination_A_or_B("./BaseFile/Termination_B_20121225v05.xml", "Termination_B_AAAABBB_RFx_CCCDDD_");
-		process_for_Termination_C("./BaseFile/Termination_C_20121226v11.xml", "Termination_C_AAAABBB_CCCDDD_");
-		process_for_Elongation_Ca1("./BaseFile/Elongation_Ca1_20130624v02.xml", "AAAABBB_Elongation_Ca1_CCCDDD_");
-		process_for_Elongation_Ca2("./BaseFile/Elongation_Ca2_20130624v02.xml", "AAAABBB_Elongation_Ca2_CCCDDD_");
+		process_for_Initiation_C(ePURE_Header.base_Initiation_C, "Initiation_C_");
+		process_for_Termination_A_or_B(ePURE_Header.base_Termination_A, "Termination_A_AAAABBB_RFx_CCCDDD_");
+		process_for_Termination_A_or_B(ePURE_Header.base_Termination_B, "Termination_B_AAAABBB_RFx_CCCDDD_");
+		process_for_Termination_C(ePURE_Header.base_Termination_C, "Termination_C_AAAABBB_CCCDDD_");
+		process_for_Elongation_Ca1(ePURE_Header.base_Elongation_Ca1, "AAAABBB_Elongation_Ca1_CCCDDD_");
+		process_for_Elongation_Ca2(ePURE_Header.base_Elongation_Ca2, "AAAABBB_Elongation_Ca2_CCCDDD_");
 		
 	}
 	
@@ -117,9 +117,13 @@ public class Sequence_Dependent_SBML_Generator {
 			byte_stream_map.put(output_file, byte_ostream.toByteArray());
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("some errors");
+			System.out.println("Could not find the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if(reader!=null) {
@@ -133,7 +137,9 @@ public class Sequence_Dependent_SBML_Generator {
 					byte_ostream.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		
@@ -231,9 +237,13 @@ public class Sequence_Dependent_SBML_Generator {
 			byte_stream_map.put(output_file, byte_ostream.toByteArray());
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("some errors");
+			System.out.println("Could not find the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if(reader!=null) {
@@ -247,7 +257,9 @@ public class Sequence_Dependent_SBML_Generator {
 					byte_ostream.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		
@@ -329,9 +341,13 @@ public class Sequence_Dependent_SBML_Generator {
 			byte_stream_map.put(output_file, byte_ostream.toByteArray());
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("some errors");
+			System.out.println("Could not find the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if(reader!=null) {
@@ -345,7 +361,9 @@ public class Sequence_Dependent_SBML_Generator {
 					byte_ostream.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		
@@ -503,9 +521,13 @@ public class Sequence_Dependent_SBML_Generator {
 			byte_stream_map.put(output_file, byte_ostream.toByteArray());
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("some errors");
+			System.out.println("Could not find the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if(reader!=null) {
@@ -519,7 +541,9 @@ public class Sequence_Dependent_SBML_Generator {
 					byte_ostream.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to the base SBML file: " + base_file);
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		

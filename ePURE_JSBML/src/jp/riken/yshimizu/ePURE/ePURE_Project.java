@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ePURE_Project_Summary {
+public class ePURE_Project {
 	
 	/*---------------------------------------------------------
 	 * field
@@ -23,23 +23,25 @@ public class ePURE_Project_Summary {
 	private HashMap<String, ArrayList<String>> codon_vs_tRNA_map;
 	private ArrayList<String> codon_array;
 	
-	private int SBML_level = 2;
-	private int SBML_version = 4;
+	private String initial_values_csv;
+	private String parameters_csv;
 	
 	/*---------------------------------------------------------
 	 * constructor
 	---------------------------------------------------------*/
 	
-	public ePURE_Project_Summary(String project_name, String seq, String output_directory, String conf_file) {
+	public ePURE_Project(String project_name, String seq, String output_directory, String conf_file, String initial_values_csv, String parameters_csv) {
 		
 		this.output_directory = output_directory;
 		this.project_name = project_name;
-		this.rna_seq = seq;
 		this.zipped_SBML_files_name = project_name + "_SBML_files.zip";
 		
 		aa_map = new HashMap<>();
 		tRNA_map = new HashMap<>();
 		codon_vs_tRNA_map = new HashMap<>();
+		
+		this.initial_values_csv = initial_values_csv;
+		this.parameters_csv = parameters_csv;
 		
 		//set default maps
 		set_maps();
@@ -50,17 +52,34 @@ public class ePURE_Project_Summary {
 		}
 		
 		//sequence check
-		this.rna_seq = this.rna_seq.toUpperCase();
+		seq = seq.toUpperCase();
+		if(sequence_check(seq)==false){
+			System.out.println("The sequence should be RNA or DNA.");
+			System.exit(0);
+		}
+		seq = DNA_to_RNA(seq);
+		if(!(seq.startsWith("AUG"))){
+			System.out.println("The sequence should be started with ATG or AUG.");
+			System.exit(0);
+		}
+		if(!((seq.endsWith("UAG")||(seq.endsWith("UAA"))||(seq.endsWith("UGA"))))){
+			System.out.println("The sequence should be ended with TAA, TAG, TGA, UAA, UAG, or UGA");
+			System.exit(0);
+		}
+		if(seq.length()%3!=0){
+			System.out.println("The sequence should be multiples of three.");
+			System.exit(0);
+		}
+		
+		this.rna_seq = seq;
+		
+		System.out.println("Nucleotide sequence check: OK");
+		System.out.println();
 		
 		//input sequence information to the array
 		codon_array = new ArrayList<>();
-		int seq_size = this.rna_seq.length();
-		if(seq_size%3!=0){
-			System.out.println("a sequence is not correct.");
-		}else{
-			for(int i=0;i<(seq_size/3);i++){
-				codon_array.add(this.rna_seq.substring(i*3, i*3+3));
-			}
+		for(int i=0;i<(rna_seq.length()/3);i++){
+			codon_array.add(this.rna_seq.substring(i*3, i*3+3));
 		}
 		
 	}
@@ -260,6 +279,7 @@ public class ePURE_Project_Summary {
 		
 		BufferedReader reader = null;
 		String str;
+		String temp;
 		
 		try{
 			reader = new BufferedReader(new FileReader(conf_file));
@@ -271,17 +291,22 @@ public class ePURE_Project_Summary {
 					break;
 				}
 				
-				str = str.replace(" ", "");
+				temp = str.replace(" ", "");
 				
-				if(str.contains("=")){
-					String[] s = str.split("=");
+				if(temp.contains("=")){
+					String[] s = temp.split("=");
+					if(s.length!=2){
+						System.out.println("Found some errors in conf file: " + str);
+						System.exit(0);
+					}
 					if(aa_map.containsKey(s[0])){
 						if(s[1].equals("0")){
 							aa_map.put(s[0], false);
 						}else if(s[1].equals("1")){
 							aa_map.put(s[0], true);
 						}else{
-							System.out.println("found some errors in conf file.");
+							System.out.println("Found some errors in conf file: " + str);
+							System.exit(0);
 						}
 					}else if(tRNA_map.containsKey(s[0])){
 						if(s[1].equals("0")){
@@ -289,7 +314,8 @@ public class ePURE_Project_Summary {
 						}else if(s[1].equals("1")){
 							tRNA_map.put(s[0], true);
 						}else{
-							System.out.println("found some errors in conf file.");
+							System.out.println("Found some errors in conf file: " + str);
+							System.exit(0);
 						}
 					}else if(codon_vs_tRNA_map.containsKey(s[0])){
 						ArrayList<String> array = new ArrayList<>();
@@ -299,51 +325,66 @@ public class ePURE_Project_Summary {
 								if(tRNA_map.containsKey(s2[i])){
 									array.add(s2[i]);
 								}else{
-									System.out.println("found some errors in conf file.3");
+									System.out.println("Found some errors in conf file: " + str);
+									System.exit(0);
 								}
 							}
 						}else{
 							if(tRNA_map.containsKey(s[1])){
 								array.add(s[1]);
 							}else{
-								System.out.println("found some errors in conf file.");
+								System.out.println("Found some errors in conf file: " + str);
+								System.exit(0);
 							}
 						}
 						codon_vs_tRNA_map.put(s[0], array);
 					}else{
-						System.out.println("found some errors in conf file.");
+						System.out.println("Found some errors in conf file: " + str);
+						System.exit(0);
 					}
 				}
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("some errors");
+			System.out.println("Could not find conf file.");
+			e.printStackTrace();
+			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to the conf file.");
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if (reader != null) {
 					reader.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to the conf file.");
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		
 	}
 	
 	private boolean sequence_check(String str){
-		
 		for(int i=0;i<str.length();i++){
-			if(str.charAt(i)!='A'&str.charAt(i)!='g'
-				&str.charAt(i)!='c'&str.charAt(i)!='t'
-				&str.charAt(i)!='A'&str.charAt(i)!='G'
-				&str.charAt(i)!='C'&str.charAt(i)!='T'
-				&str.charAt(i)!='U'&str.charAt(i)!='u'){
+			if(str.charAt(i)!='A'&&str.charAt(i)!='G'&&str.charAt(i)!='C'&&str.charAt(i)!='U'&&str.charAt(i)!='T'){
 				return false;
 			}
-		   		
 		}
 		return true;
+	}
+	
+	public String DNA_to_RNA(String seq){
+		StringBuilder sb = new StringBuilder();
+		for(int i=0;i<seq.length();i++){
+			if(seq.charAt(i)=='T'){
+				sb.append('U');
+			}else{
+				sb.append(seq.charAt(i));
+			}
+		}
+		return sb.toString();
 	}
 	
 	
@@ -368,6 +409,14 @@ public class ePURE_Project_Summary {
 		return zipped_SBML_files_name;
 	}
 	
+	public String get_initial_values_csv(){
+		return initial_values_csv;
+	}
+	
+	public String get_parameters_csv(){
+		return parameters_csv;
+	}
+	
 	public HashMap<String, Boolean> get_aa_map(){
 		return aa_map;
 	}
@@ -382,14 +431,6 @@ public class ePURE_Project_Summary {
 	
 	public ArrayList<String> get_codon_array(){
 		return codon_array;
-	}
-	
-	public int get_SBML_leve(){
-		return SBML_level;
-	}
-	
-	public int get_SBML_version(){
-		return SBML_version;
 	}
 	
 	public void update_aa_map(String key, boolean flag){

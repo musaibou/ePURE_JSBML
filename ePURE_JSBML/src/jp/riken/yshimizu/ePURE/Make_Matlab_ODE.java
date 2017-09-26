@@ -19,13 +19,6 @@ public class Make_Matlab_ODE {
 	
 	private String model_name;
 	
-	//parameters below are provided by Merge_Models class
-	private static String default_parameter_name = "k1";
-	private static int default_initial_conc = 1;//this is originally double
-	private static int default_parameter_value = 1;//this is originally double
-	private static String default_compartment_ID = "default";
-	
-	private SBMLReader reader;
 	private Model model;
 	
 	private State_For_ODE_Making state;
@@ -37,8 +30,6 @@ public class Make_Matlab_ODE {
 	---------------------------------------------------------*/
 	
 	public Make_Matlab_ODE(String sbml_file_contents) {
-		
-		reader = new SBMLReader();
 		
 		state = new State_For_ODE_Making();
 		param = new Param_For_ODE_Making();
@@ -73,9 +64,13 @@ public class Make_Matlab_ODE {
 			writer.flush();
 			
 		} catch (FileNotFoundException e) {
-			System.out.println("some errors");
+			System.out.println("Could not save ODE file.");
+			e.printStackTrace();
+			System.exit(0);
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to saving the ODE file.");
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if(writer!=null){
@@ -86,7 +81,7 @@ public class Make_Matlab_ODE {
 					byte_ostream.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to saving the ODE file.");
 			}
 		}
 		
@@ -100,8 +95,10 @@ public class Make_Matlab_ODE {
 	
 	private void init(String sbml_file_contents){
 		
-		System.out.println("Initializing ...");
+		System.out.println("ODE file will be prepared from merged SBML file...");
 		System.out.println();
+		
+		SBMLReader reader = new SBMLReader();
 		
 		//solve name
 		/*if(xml_file_name.endsWith(".xml")){
@@ -113,7 +110,9 @@ public class Make_Matlab_ODE {
 		try{
 			model = reader.readSBMLFromString(sbml_file_contents).getModel();
 		}catch(XMLStreamException e){
-			System.out.println("some errors");
+			System.out.println("XML stream error in reading the merged SBML file.");
+			e.printStackTrace();
+			System.exit(0);
 		}
 		if(model.getName()!=model_name){
 			model_name = model.getName();
@@ -121,19 +120,19 @@ public class Make_Matlab_ODE {
 		
 		//input state
 		ListOf<Species> ls_species = model.getListOfSpecies();
-		System.out.println("Found " + ls_species.size() + " species.");
+		System.out.println("  Found " + ls_species.size() + " species.");
 		for(int i=0;i<ls_species.size();i++){
 			state.add(ls_species.get(i).getId());
 		}
 		
 		//input parameter
 		ListOf<Reaction> ls_reaction = model.getListOfReactions();
-		System.out.println("Found " + ls_reaction.size() + " reactions");
+		System.out.println("  Found " + ls_reaction.size() + " reactions");
 		System.out.println();
 		for(int i=0;i<ls_reaction.size();i++){
-			param.add(ls_reaction.get(i).getId()+"_"+default_parameter_name);
+			param.add(ls_reaction.get(i).getId()+"_"+ePURE_Header.default_parameter_name);
 		}
-		param.add(default_compartment_ID);//Last piece is from compartment, size becomes (number of reactions + 1)
+		param.add(ePURE_Header.default_compartment_ID);//Last piece is from compartment, size becomes (number of reactions + 1)
 		
 		//input reaction
 		for(int i=0;i<ls_reaction.size();i++){
@@ -201,8 +200,6 @@ public class Make_Matlab_ODE {
 	
 	private void write_function_definition(StringBuilder sb){
 		
-		System.out.println("Write function definition ... ");
-		
 		sb.append("function [output] = " + model_name +"(varargin)\n");
 		
 		// HEADER
@@ -256,8 +253,6 @@ public class Make_Matlab_ODE {
 	
 	private void write_argument_handling(StringBuilder sb){
 		
-		System.out.println("Write argument handling ... ");
-		
 		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
 		sb.append("% HANDLE VARIABLE INPUT ARGUMENTS\n");
 		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
@@ -269,7 +264,7 @@ public class Make_Matlab_ODE {
 		int i_index = 0;
 		
 		while(i_index+1 < state.size()){
-			sb.append(default_initial_conc + ", ");
+			sb.append(ePURE_Header.default_initial_conc + ", ");
 			i_index++;
 			i_count++;
 			if(i_count == 10){
@@ -277,7 +272,7 @@ public class Make_Matlab_ODE {
 				i_count = 0;
 			}
 		}
-		sb.append(default_initial_conc + "];\n");
+		sb.append(ePURE_Header.default_initial_conc + "];\n");
 		
 		sb.append("\toutput = output(:);\n");
 		sb.append("\treturn\n");
@@ -334,7 +329,7 @@ public class Make_Matlab_ODE {
 		i_index = 0;
 		
 		while(i_index+1 < param.size()){
-			sb.append(default_parameter_value + ", ");
+			sb.append(ePURE_Header.default_parameter_value + ", ");
 			i_index++;
 			i_count++;
 			if (i_count == 10){
@@ -342,7 +337,7 @@ public class Make_Matlab_ODE {
 				i_count = 0;
 			}
 		}
-		sb.append(default_parameter_value + "];\n");
+		sb.append(ePURE_Header.default_parameter_value + "];\n");
 		
 		// REACTION NAMES //
 		sb.append("\telseif strcmp(varargin{1},'reactions'),\n");
@@ -377,7 +372,7 @@ public class Make_Matlab_ODE {
 		i_index = 0;
 		
 		while(i_index+1 < param.size()){
-			sb.append(default_parameter_value + ", ");
+			sb.append(ePURE_Header.default_parameter_value + ", ");
 			i_index++;
 			i_count++;
 			if (i_count == 10){
@@ -385,7 +380,7 @@ public class Make_Matlab_ODE {
 				i_count = 0;
 			}
 		}
-		sb.append(default_parameter_value + "];\n");
+		sb.append(ePURE_Header.default_parameter_value + "];\n");
 		
 		sb.append("\tparam = param(:);\n");
 		sb.append("elseif nargin == 3,\n");
@@ -414,8 +409,6 @@ public class Make_Matlab_ODE {
 	}
 	
 	private void write_initialization(StringBuilder sb){
-		
-		System.out.println("Write initialization ... ");
 		
 		// INITIALIZE THE STATES
 		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
@@ -447,8 +440,6 @@ public class Make_Matlab_ODE {
 	
 	private void write_ODE(StringBuilder sb){
 		
-		System.out.println("Write ODE ... ");
-		
 		// WRITE THE ODES
 		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
 		sb.append("% DIFFERENTIAL EQUATIONS\n");
@@ -461,7 +452,7 @@ public class Make_Matlab_ODE {
 		for(int i=0;i<state.size();i++){
 			sb.append("output(" + (i+1) + ") = " + get_ODE(i) + ";\n");
 			if((i+1)%100==0){
-				System.out.println("  processed " + (i+1) + "/" + state.size() + " ...");
+				System.out.println("  Processed " + (i+1) + "/" + state.size() + " ...");
 			}
 		}
 		System.out.println();
@@ -471,8 +462,6 @@ public class Make_Matlab_ODE {
 	}
 	
 	private void write_return_values(StringBuilder sb){
-		
-		System.out.println("Write return values ... ");
 		
 		// WRITE RETURN VALUES
 		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");

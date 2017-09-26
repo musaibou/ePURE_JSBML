@@ -15,6 +15,8 @@ public class Simulation_Files_Generator {
 	 * private field
 	---------------------------------------------------------*/
 	
+	private ePURE_Project epure;
+	
 	private String output_directory;
 	private String project_name;
 	private String original_zip_file_name;
@@ -23,11 +25,12 @@ public class Simulation_Files_Generator {
 	 * constructor
 	---------------------------------------------------------*/
 	
-	public Simulation_Files_Generator(ePURE_Project_Summary summary) {
+	public Simulation_Files_Generator(ePURE_Project epure) {
 		
-		this.output_directory = summary.get_output_directory();
-		this.project_name = summary.get_project_name();
-		this.original_zip_file_name = summary.get_zipped_SBML_files_name();
+		this.output_directory = epure.get_output_directory();
+		this.project_name = epure.get_project_name();
+		this.original_zip_file_name = epure.get_zipped_SBML_files_name();
+		this.epure = epure;
 		
 	}
 	
@@ -37,7 +40,7 @@ public class Simulation_Files_Generator {
 	
 	public void execute(){
 		
-		//from here, outputs simulation files then they are zipped
+		//from here, outputs simulation files and then they are zipped
 		String xml_file_name;
 		byte[] xml_file_contents;
 		String m_file_name;
@@ -56,9 +59,11 @@ public class Simulation_Files_Generator {
 		try {
 			zip_file = new ZipFile(output_directory + original_zip_file_name);
 		} catch (IOException e) {
-			System.out.println("some erros");
+			System.out.println("DiSk I/O error related to using the SBML zip file: " + original_zip_file_name);
+			e.printStackTrace();
+			System.exit(0);
 		}
-		ByteArrayOutputStream xml_byte_ostream = new Merge_Models(project_name, zip_file, 2, 4).execute();
+		ByteArrayOutputStream xml_byte_ostream = new Merge_Models(project_name, zip_file).execute();
 		xml_file_contents = xml_byte_ostream.toByteArray();
 		xml_file_name = "model/" + project_name + ".xml";
 		
@@ -68,7 +73,7 @@ public class Simulation_Files_Generator {
 		m_file_name = project_name + ".m";
 		
 		//make CSV files
-		ArrayList<byte[]> array = new Dat_File_Generator(project_name, xml_byte_ostream.toString()).execute();
+		ArrayList<byte[]> array = new Dat_File_Generator(epure, xml_byte_ostream.toString()).execute();
 		initial_value_csv_name = "dat/" + project_name + "_initial_values.csv";
 		initial_value_csv_contents = array.get(0);
 		parameters_csv_name = "dat/" + project_name + "_parameters.csv";
@@ -139,7 +144,9 @@ public class Simulation_Files_Generator {
 			file_ostream.flush();
 			file_ostream.close();
 		}catch(IOException e){
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to making the simulation files");
+			e.printStackTrace();
+			System.exit(0);
 		}finally{
 			try{
 				if(byte_ostream!=null){
@@ -152,7 +159,9 @@ public class Simulation_Files_Generator {
 					file_ostream.close();
 				}
 			}catch(IOException e){
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to making the simulation files");
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 	}

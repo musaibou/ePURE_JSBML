@@ -22,16 +22,10 @@ public class Merge_Models {
 	---------------------------------------------------------*/
 	
 	private String merged_model_ID;
-	
-	private ZipFile zip_file = null;
-	
 	private int SBML_level;
 	private int SBML_version;
 	
-	private static String default_parameter_name = "k1";
-	private static double default_initial_conc = 1;
-	private static double default_parameter_value = 1;
-	private static String default_compartment_ID = "default";
+	private ZipFile zip_file = null;
 	
 	private SBMLDocument output_document;
 	private Model output_model;
@@ -43,27 +37,26 @@ public class Merge_Models {
 	private LinkedHashMap<String, Reaction> reaction_map = new LinkedHashMap<String, Reaction>();
 	private long ID_number;
 	
-	private String error_result;
+	//private String error_result;
 	
 	/*---------------------------------------------------------
 	 * constructor
 	---------------------------------------------------------*/
 	
-	public Merge_Models(String merged_model_ID, ZipFile zip_file, int SBML_level, int SBML_version){
+	public Merge_Models(String project_name, ZipFile zip_file){
 		
 		this.zip_file = zip_file;
 		
-		this.merged_model_ID = merged_model_ID;
+		this.SBML_level = ePURE_Header.SBML_level;
+		this.SBML_version = ePURE_Header.SBML_version;
+		this.merged_model_ID = project_name;
 		
-		this.SBML_level = SBML_level;
-		this.SBML_version = SBML_version;
-		
-		output_document = new SBMLDocument(SBML_level, SBML_version);
+		output_document = new SBMLDocument(ePURE_Header.SBML_level, ePURE_Header.SBML_version);
 		output_model = output_document.createModel(this.merged_model_ID);
 		output_model.setName(this.merged_model_ID);
 		
 		compartment = output_model.createCompartment();
-		compartment.setId(default_compartment_ID);
+		compartment.setId(ePURE_Header.default_compartment_ID);
 		compartment.setSpatialDimensions(3);
 		compartment.setSize(1.0);
 		compartment.setUnits("volume");
@@ -96,22 +89,29 @@ public class Merge_Models {
 			
 			Enumeration<? extends ZipEntry> entries = zip_file.entries();
 			
+			System.out.println(number_of_files + " SBML files will be merged...");
+			System.out.println();
+			
 			while(entries.hasMoreElements()){
 				
 				count++;
-				System.out.println("Processing " + count + "/" + number_of_files + " files from zip...");
-				
+				if(count%10==0){
+					System.out.println("  Processed " + count + "/" + number_of_files + " files from zip...");
+				}
 				entry = entries.nextElement();
-				System.out.println(entry.getName());
 				
 				try {
 					istream = zip_file.getInputStream(entry);
 					append_document_contents(reader.readSBMLFromStream(istream));
 					istream.close();
 				} catch (IOException e) {
-					System.out.println("some errors");
+					System.out.println("Disk I/O related to the SBML file: " + entry.getName());
+					e.printStackTrace();
+					System.exit(0);
 				} catch (XMLStreamException e) {
-					System.out.println("some errors");
+					System.out.println("XML parse error related to the SBML file: " + entry.getName());
+					e.printStackTrace();
+					System.exit(0);
 				}
 				
 			}
@@ -132,35 +132,40 @@ public class Merge_Models {
 			merged_reactions++;
 		}
 		
-		System.out.println(merged_species + " / " + pre_number_of_species + " species are merged.");
-		System.out.println(merged_reactions + " / " + pre_number_of_reaction + " reactions are merged.");
+		System.out.println("  " + merged_species + " / " + pre_number_of_species + " species are merged.");
+		System.out.println("  " + merged_reactions + " / " + pre_number_of_reaction + " reactions are merged.");
 		System.out.println();
 		
 		try{
 			writer.write(output_document, byte_ostream);
 		}catch(XMLStreamException e){
-			System.out.println("some errors");
+			System.out.println("XML stream error while saving the merged SBML file.");
+			e.printStackTrace();
+			System.exit(0);
 		}finally{
 			try{
 				if(byte_ostream!=null){
 					byte_ostream.close();
 				}
 			}catch(IOException e){
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to merging the SBML files.");
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		//writer.writeSBML(output_document, merged_model_ID + ".xml");
-		System.out.println("saved merged model as " + merged_model_ID + ".xml");
+		System.out.println("  Saved merged model as " + merged_model_ID + ".xml");
+		System.out.println();
 		
 		return byte_ostream;
 		
 	}
 	
-	public String get_error_result(){
+	/*public String get_error_result(){
 		
 		return error_result;
 		
-	}
+	}*/
 	
 	/*---------------------------------------------------------
 	 * private method
@@ -320,7 +325,7 @@ public class Merge_Models {
 		converted.setId(original.getName());//170616 modified
 		converted.setName(original.getName());
 		converted.setCompartment(compartment.getId());
-		converted.setInitialConcentration(default_initial_conc);
+		converted.setInitialConcentration(ePURE_Header.default_initial_conc);
 		
 		return converted;
 		
@@ -402,10 +407,10 @@ public class Merge_Models {
 		KineticLaw kinetic_law = converted.createKineticLaw();
 		Parameter parameter = new Parameter();
 		
-		parameter.setId(default_parameter_name);
-		parameter.setName(default_parameter_name);
+		parameter.setId(ePURE_Header.default_parameter_name);
+		parameter.setName(ePURE_Header.default_parameter_name);
 		parameter.setUnits("substance");
-		parameter.setValue(default_parameter_value);
+		parameter.setValue(ePURE_Header.default_parameter_value);
 		parameter.setConstant(true);
 		
 		StringBuilder sb = new StringBuilder();

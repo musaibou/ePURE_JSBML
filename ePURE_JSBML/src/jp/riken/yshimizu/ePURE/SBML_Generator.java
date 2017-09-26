@@ -14,7 +14,7 @@ public class SBML_Generator {
 	 * private field
 	---------------------------------------------------------*/
 	
-	private ePURE_Project_Summary summary;
+	private ePURE_Project epure;
 	
 	private String output_directory;
 	private String zipped_SBML_files_name;
@@ -25,11 +25,11 @@ public class SBML_Generator {
 	 * constructor
 	---------------------------------------------------------*/
 	
-	public SBML_Generator(ePURE_Project_Summary summary) {
+	public SBML_Generator(ePURE_Project epure) {
 		
-		this.summary = summary;
-		this.output_directory = summary.get_output_directory();
-		this.zipped_SBML_files_name = summary.get_zipped_SBML_files_name();
+		this.epure = epure;
+		this.output_directory = epure.get_output_directory();
+		this.zipped_SBML_files_name = epure.get_zipped_SBML_files_name();
 		
 		byte_stream_map = new TreeMap<>();
 		
@@ -41,17 +41,18 @@ public class SBML_Generator {
 	
 	public void execute(){
 		
-		System.out.println("making SBML files...");
+		System.out.println("Making SBML files...");
+		System.out.println();
 		
 		//sequence independent SBMLs
 		
-		new Sequence_Independent_SBML_Generator(summary, byte_stream_map).execute();
+		new Sequence_Independent_SBML_Generator(epure, byte_stream_map).execute();
 		
 		//sequence dependent SBMLs
 		
-		new Sequence_Dependent_SBML_Generator(summary, byte_stream_map).execute();
+		new Sequence_Dependent_SBML_Generator(epure, byte_stream_map).execute();
 		
-		//save file
+		//save zip file
 		ByteArrayOutputStream byte_ostream = new ByteArrayOutputStream();
 		
 		ZipOutputStream zip_ostream = new ZipOutputStream(byte_ostream);
@@ -76,7 +77,9 @@ public class SBML_Generator {
 			file_ostream.flush();
 			file_ostream.close();
 		}catch(IOException e){
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to saving SBML files as a zip file.");
+			e.printStackTrace();
+			System.exit(0);
 		}finally{
 			try{
 				if(byte_ostream!=null){
@@ -89,11 +92,15 @@ public class SBML_Generator {
 					file_ostream.close();
 				}
 			}catch(IOException e){
-				System.out.println("some errors1");
+				System.out.println("Disk I/O error related to saving SBML files as a zip file.");
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		
-		System.out.println("saved " + zipped_SBML_files_name);
+		System.out.println();
+		System.out.println("  Zipped " + byte_stream_map.size() + " files into " + zipped_SBML_files_name);
+		System.out.println();
 		
 	}
 	

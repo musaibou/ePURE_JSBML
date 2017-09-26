@@ -66,7 +66,9 @@ public class Sample_Code_Generator {
 			writer.flush();
 			
 		} catch (IOException e) {
-			System.out.println("some errors");
+			System.out.println("Disk I/O error related to making the sample m file.");
+			e.printStackTrace();
+			System.exit(0);
 		} finally {
 			try {
 				if(writer!=null){
@@ -77,7 +79,9 @@ public class Sample_Code_Generator {
 					byte_ostream.close();
 				}
 			} catch (IOException e) {
-				System.out.println("some errors");
+				System.out.println("Disk I/O error related to making the sample m file.");
+				e.printStackTrace();
+				System.exit(0);
 			}
 		}
 		
