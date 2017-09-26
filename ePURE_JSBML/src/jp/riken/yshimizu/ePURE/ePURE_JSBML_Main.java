@@ -43,10 +43,10 @@ public class ePURE_JSBML_Main {
 	}
 	
 	/*---------------------------------------------------------
-	 * public method
+	 * private method
 	---------------------------------------------------------*/
 	
-	public void start(String[] args) {
+	private void start(String[] args) {
 		
 		//command line
 		parse_command_line(args);
@@ -64,10 +64,6 @@ public class ePURE_JSBML_Main {
 		System.out.println();
 		
 	}
-	
-	/*---------------------------------------------------------
-	 * private method
-	---------------------------------------------------------*/
 	
 	private void parse_command_line(String[] args){
 		
