@@ -15,7 +15,7 @@ public final class ePURE_Header {
 	static final String base_EnergyRegeneration_A = "./BaseFile/EnergyRegeneration_A_20121015v03.xml";
 	static final String base_EnergyRegeneration_B = "./BaseFile/EnergyRegeneration_B_20121016v05.xml";
 	static final String base_EnergyRegeneration_C = "./BaseFile/EnergyRegeneration_C_20121016v05.xml";
-	static final String base_EnergyRegeneration_D = "./BaseFile/EnergyRegeneration_D_20130501v03.xml";
+	static final String base_EnergyRegeneration_D = "./BaseFile/EnergyRegeneration_D_20170926v04.xml";
 	static final String base_FMet_tRNASynthesis = "./BaseFile/FMet_tRNASynthesis_20121015v08.xml";
 	static final String base_Initiation_A = "./BaseFile/Initiation_A_20121016v04.xml";
 	static final String base_Initiation_B1 = "./BaseFile/Initiation_B1_20121016v24.xml";

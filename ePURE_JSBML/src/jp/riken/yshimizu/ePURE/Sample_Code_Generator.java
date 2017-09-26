@@ -41,7 +41,7 @@ public class Sample_Code_Generator {
 			writer.newLine();
 			writer.write("%% Read initial values from from csv");writer.newLine();
 			writer.newLine();
-			writer.write("data_dir = './dat/';");
+			writer.write("data_dir = './dat/';");writer.newLine();
 			writer.write("initial_values_file = '" + project_name + "_initial_values.csv';");writer.newLine();
 			writer.newLine();
 			writer.write("initial_values_data = importdata([data_dir initial_values_file], ',', 1);");writer.newLine();

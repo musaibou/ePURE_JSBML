@@ -48,18 +48,14 @@ public class Make_Matlab_ODE {
 		BufferedWriter writer = null;
 		ByteArrayOutputStream byte_ostream = new ByteArrayOutputStream();
 		
-		StringBuilder sb =new StringBuilder();
-		
 		try{
 			writer = new BufferedWriter(new OutputStreamWriter(byte_ostream));
 			
-			write_function_definition(sb);
-			write_argument_handling(sb);
-			write_initialization(sb);
-			write_ODE(sb);
-			write_return_values(sb);
-			
-			writer.write(sb.toString());
+			write_function_definition(writer);
+			write_argument_handling(writer);
+			write_initialization(writer);
+			write_ODE(writer);
+			write_return_values(writer);
 			
 			writer.flush();
 			
@@ -198,281 +194,281 @@ public class Make_Matlab_ODE {
 		
 	}
 	
-	private void write_function_definition(StringBuilder sb){
+	private void write_function_definition(BufferedWriter writer) throws IOException{
 		
-		sb.append("function [output] = " + model_name +"(varargin)\n");
+		writer.write("function [output] = " + model_name +"(varargin)");writer.newLine();
 		
 		// HEADER
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% " + model_name + "\n");
-		sb.append("% Generated: " + new Date().toString() + "\n");
-		sb.append("% \n");
-		sb.append("% [output] = " + model_name + "() => output = initial conditions in column vector\n");
-		sb.append("% [output] = " + model_name + "('states') => output = state names in cell-array\n");
-		sb.append("% [output] = " + model_name + "('algebraic') => output = algebraic variable names in cell-array\n");
-		sb.append("% [output] = " + model_name + "('parameters') => output = parameter names in cell-array\n");
-		sb.append("% [output] = " + model_name + "('parametervalues') => output = parameter values in column vector\n");
-		sb.append("% [output] = " + model_name + "('reactions') => output = reaction names in cell-array\n");
-		sb.append("% [output] = " + model_name + "(time,state) => output = time derivatives in column vector\n");
-		sb.append("% [output] = " + model_name + "(time,state,param) => output = time derivatives in column vector\n");
-		sb.append("% \n");
-		sb.append("% State names and ordering:\n");
-		sb.append("% \n");
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% " + model_name);writer.newLine();
+		writer.write("% Generated: " + new Date().toString());writer.newLine();
+		writer.write("% ");writer.newLine();
+		writer.write("% [output] = " + model_name + "() => output = initial conditions in column vector");writer.newLine();
+		writer.write("% [output] = " + model_name + "('states') => output = state names in cell-array");writer.newLine();
+		writer.write("% [output] = " + model_name + "('algebraic') => output = algebraic variable names in cell-array");writer.newLine();
+		writer.write("% [output] = " + model_name + "('parameters') => output = parameter names in cell-array");writer.newLine();
+		writer.write("% [output] = " + model_name + "('parametervalues') => output = parameter values in column vector");writer.newLine();
+		writer.write("% [output] = " + model_name + "('reactions') => output = reaction names in cell-array");writer.newLine();
+		writer.write("% [output] = " + model_name + "(time,state) => output = time derivatives in column vector");writer.newLine();
+		writer.write("% [output] = " + model_name + "(time,state,param) => output = time derivatives in column vector");writer.newLine();
+		writer.write("% ");writer.newLine();
+		writer.write("% State names and ordering:");writer.newLine();
+		writer.write("% ");writer.newLine();
 		
 		for (int i=0;i<state.size();i++){
-			sb.append("% " + state.get_renamed(i) + ": " + state.get(i) + "\n");
+			writer.write("% " + state.get_renamed(i) + ": " + state.get(i));writer.newLine();
 		}
 		
-		sb.append("% \n");
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("\n");
-		sb.append("% Parameter names and ordering:\n");
-		sb.append("% \n");
+		writer.write("% ");writer.newLine();
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();;
+		writer.newLine();
+		writer.write("% Parameter names and ordering:");writer.newLine();
+		writer.write("% ");writer.newLine();
 		
 		for (int i=0;i<param.size();i++){
-			sb.append("% " + param.get_renamed(i) + ": " + param.get(i) +"\n");
+			writer.write("% " + param.get_renamed(i) + ": " + param.get(i));writer.newLine();
 		}
 		
-		sb.append("% \n");
-		sb.append("% Reaction names and ordering:\n");
-		sb.append("% \n");
+		writer.write("% ");writer.newLine();
+		writer.write("% Reaction names and ordering:");writer.newLine();
+		writer.write("% ");writer.newLine();
 		
 		for (int i=0;i<reaction.size();i++){
-			sb.append("% " + reaction.get_renamed(i) + ": " + reaction.get(i) + "\n");
+			writer.write("% " + reaction.get_renamed(i) + ": " + reaction.get(i));writer.newLine();
 		}
 		
-		sb.append("% \n");
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("\n");
+		writer.write("% ");writer.newLine();
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.newLine();
 		
 		// VARIABLE DECLARATION
-		sb.append("global time\n");
-		sb.append("\n");
+		writer.write("global time");writer.newLine();
+		writer.newLine();
 		
 	}
 	
-	private void write_argument_handling(StringBuilder sb){
+	private void write_argument_handling(BufferedWriter writer) throws IOException{
 		
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% HANDLE VARIABLE INPUT ARGUMENTS\n");
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("if nargin == 0,\n");
-		sb.append("\t% Return initial conditions of the state variables (and possibly algebraic variables)\n");
-		sb.append("\toutput = [");
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% HANDLE VARIABLE INPUT ARGUMENTS");writer.newLine();
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("if nargin == 0,");writer.newLine();
+		writer.write("\t% Return initial conditions of the state variables (and possibly algebraic variables)");writer.newLine();
+		writer.write("\toutput = [");
 		
 		int i_count = 0;
 		int i_index = 0;
 		
 		while(i_index+1 < state.size()){
-			sb.append(ePURE_Header.default_initial_conc + ", ");
+			writer.write(ePURE_Header.default_initial_conc + ", ");
 			i_index++;
 			i_count++;
 			if(i_count == 10){
-				sb.append("...\n\t\t");
+				writer.write("...");writer.newLine();writer.write("\t\t");
 				i_count = 0;
 			}
 		}
-		sb.append(ePURE_Header.default_initial_conc + "];\n");
+		writer.write(ePURE_Header.default_initial_conc + "];");writer.newLine();
 		
-		sb.append("\toutput = output(:);\n");
-		sb.append("\treturn\n");
-		sb.append("elseif nargin == 1,\n");
-		sb.append("\tif strcmp(varargin{1},'states'),\n");
-		sb.append("\t\t% Return state names in cell-array\n");
-		sb.append("\t\toutput = {");
+		writer.write("\toutput = output(:);");writer.newLine();
+		writer.write("\treturn");writer.newLine();
+		writer.write("elseif nargin == 1,");writer.newLine();
+		writer.write("\tif strcmp(varargin{1},'states'),");writer.newLine();
+		writer.write("\t\t% Return state names in cell-array");writer.newLine();
+		writer.write("\t\toutput = {");
 		
 		i_count = 0;
 		i_index = 0;
 		
 		while(i_index+1 < state.size()){
-			sb.append("'" + state.get(i_index) + "', ");
+			writer.write("'" + state.get(i_index) + "', ");
 			i_index++;
 			i_count++;
 			if(i_count == 10){
-				sb.append("...\n\t\t\t");
+				writer.write("...");writer.newLine();writer.write("\t\t\t");
 				i_count = 0;
 			}
 		}
-		sb.append("'" + state.get(i_index) + "'};\n");
+		writer.write("'" + state.get(i_index) + "'};");writer.newLine();
 		
-		sb.append("\telseif strcmp(varargin{1},'algebraic'),\n");
-		sb.append("\t\t% Return algebraic variable names in cell-array\n");
+		writer.write("\telseif strcmp(varargin{1},'algebraic'),");writer.newLine();
+		writer.write("\t\t% Return algebraic variable names in cell-array");writer.newLine();
 		
 		// algebraic variable may be empty in the current (20131127) ePURE specification
-		sb.append("\t\toutput = {};\n");
+		writer.write("\t\toutput = {};");writer.newLine();
 		
 		// PARAMETER NAMES
-		sb.append("\telseif strcmp(varargin{1},'parameters'),\n");
-		sb.append("\t\t% Return parameter names in cell-array\n");
-		sb.append("\t\toutput = {");
+		writer.write("\telseif strcmp(varargin{1},'parameters'),");writer.newLine();
+		writer.write("\t\t% Return parameter names in cell-array");writer.newLine();
+		writer.write("\t\toutput = {");
 		
 		i_count = 0;
 		i_index = 0;
 		
 		while(i_index+1 < param.size()){
-			sb.append("'" + param.get(i_index) + "', ");
+			writer.write("'" + param.get(i_index) + "', ");
 			i_index++;
 			i_count++;
 			if (i_count == 10){
-				sb.append("...\n\t\t\t");
+				writer.write("...");writer.newLine();writer.write("\t\t\t");
 				i_count = 0;
 			}
 		}
-		sb.append("'" + param.get(i_index) + "'};\n");
+		writer.write("'" + param.get(i_index) + "'};");writer.newLine();
 		
 		// PARAMETER VALUES //
-		sb.append("\telseif strcmp(varargin{1},'parametervalues'),\n");
-		sb.append("\t\t% Return parameter values in column vector\n");
-		sb.append("\t\toutput = [");
+		writer.write("\telseif strcmp(varargin{1},'parametervalues'),");writer.newLine();
+		writer.write("\t\t% Return parameter values in column vector");writer.newLine();
+		writer.write("\t\toutput = [");
 		
 		i_count = 0;
 		i_index = 0;
 		
 		while(i_index+1 < param.size()){
-			sb.append(ePURE_Header.default_parameter_value + ", ");
+			writer.write(ePURE_Header.default_parameter_value + ", ");
 			i_index++;
 			i_count++;
 			if (i_count == 10){
-				sb.append("...\n\t\t\t");
+				writer.write("...");writer.newLine();writer.write("\t\t\t");
 				i_count = 0;
 			}
 		}
-		sb.append(ePURE_Header.default_parameter_value + "];\n");
+		writer.write(ePURE_Header.default_parameter_value + "];");writer.newLine();
 		
 		// REACTION NAMES //
-		sb.append("\telseif strcmp(varargin{1},'reactions'),\n");
-		sb.append("\t\t% Return reaction names in cell-array\n");
-		sb.append("\t\toutput = {");
+		writer.write("\telseif strcmp(varargin{1},'reactions'),");writer.newLine();
+		writer.write("\t\t% Return reaction names in cell-array");writer.newLine();
+		writer.write("\t\toutput = {");
 		
 		i_count = 0;
 		i_index = 0;
 		
 		while(i_index+1 < reaction.size()){
-			sb.append("'" + reaction.get(i_index) + "', ");
+			writer.write("'" + reaction.get(i_index) + "', ");
 			i_index++;
 			i_count++;
 			if (i_count == 10 ){
-				sb.append("...\n\t\t\t");
+				writer.write("...");writer.newLine();writer.write("\t\t\t");
 				i_count = 0;
 			}
 		}
-		sb.append("'" + reaction.get(i_index) + "'};\n");
+		writer.write("'" + reaction.get(i_index) + "'};");writer.newLine();
 		
-		sb.append("\telse\n");
-		sb.append("\t\terror('Wrong input arguments! Please read the help text to the ODE file.');\n");
-		sb.append("\tend\n");
-		sb.append("\toutput = output(:);\n");
-		sb.append("\treturn\n");
-		sb.append("elseif nargin == 2,\n");
-		sb.append("\ttime = varargin{1};\n");
-		sb.append("\tstate = varargin{2};\n");
-		sb.append("\tparam = [");
+		writer.write("\telse");writer.newLine();
+		writer.write("\t\terror('Wrong input arguments! Please read the help text to the ODE file.');");writer.newLine();
+		writer.write("\tend");writer.newLine();
+		writer.write("\toutput = output(:);");writer.newLine();
+		writer.write("\treturn");writer.newLine();
+		writer.write("elseif nargin == 2,");writer.newLine();
+		writer.write("\ttime = varargin{1};");writer.newLine();
+		writer.write("\tstate = varargin{2};");writer.newLine();
+		writer.write("\tparam = [");
 		
 		i_count = 0;
 		i_index = 0;
 		
 		while(i_index+1 < param.size()){
-			sb.append(ePURE_Header.default_parameter_value + ", ");
+			writer.write(ePURE_Header.default_parameter_value + ", ");
 			i_index++;
 			i_count++;
 			if (i_count == 10){
-				sb.append("...\n\t\t");
+				writer.write("...");writer.newLine();writer.write("\t\t");
 				i_count = 0;
 			}
 		}
-		sb.append(ePURE_Header.default_parameter_value + "];\n");
+		writer.write(ePURE_Header.default_parameter_value + "];");writer.newLine();
 		
-		sb.append("\tparam = param(:);\n");
-		sb.append("elseif nargin == 3,\n");
-		sb.append("\ttime = varargin{1};\n");
-		sb.append("\tstate = varargin{2};\n");
-		sb.append("\tif length(state) ~= " + state.size() + ",\n");
-		sb.append("\t\terror('Wrong input arguments! Size of state is %d, while should be " + state.size() + ".', length(state));\n");
-		sb.append("\tend\n");
-		sb.append("\tstate = state(:);\n");
-		sb.append("\tparam = varargin{3};\n");
-		sb.append("\tif length(param) ~= " + param.size() + ",\n");
-		sb.append("\t\terror('Wrong input arguments! Size of param is %d, while should be " + param.size() + ".', length(param));\n");
-		sb.append("\tend\n");
-		sb.append("\tparam = param(:);\n");
-		sb.append("elseif nargin == 4,\n");
-		sb.append("\ttime = varargin{1};\n");
-		sb.append("\tstate = varargin{2};\n");
-		sb.append("\tstate = state(:);\n");
-		sb.append("\tparam = varargin{4};\n");
-		sb.append("\tparam = param(:);\n");
-		sb.append("else\n");
-		sb.append("\terror('Wrong input arguments! Please read the help text to the ODE file.');\n");
-		sb.append("end\n");
-		sb.append("\n");
+		writer.write("\tparam = param(:);");writer.newLine();
+		writer.write("elseif nargin == 3,");writer.newLine();
+		writer.write("\ttime = varargin{1};");writer.newLine();
+		writer.write("\tstate = varargin{2};");writer.newLine();
+		writer.write("\tif length(state) ~= " + state.size() + ",");writer.newLine();
+		writer.write("\t\terror('Wrong input arguments! Size of state is %d, while should be " + state.size() + ".', length(state));");writer.newLine();
+		writer.write("\tend");writer.newLine();
+		writer.write("\tstate = state(:);");writer.newLine();
+		writer.write("\tparam = varargin{3};");writer.newLine();
+		writer.write("\tif length(param) ~= " + param.size() + ",");writer.newLine();
+		writer.write("\t\terror('Wrong input arguments! Size of param is %d, while should be " + param.size() + ".', length(param));");writer.newLine();
+		writer.write("\tend");writer.newLine();
+		writer.write("\tparam = param(:);");writer.newLine();
+		writer.write("elseif nargin == 4,");writer.newLine();
+		writer.write("\ttime = varargin{1};");writer.newLine();
+		writer.write("\tstate = varargin{2};");writer.newLine();
+		writer.write("\tstate = state(:);");writer.newLine();
+		writer.write("\tparam = varargin{4};");writer.newLine();
+		writer.write("\tparam = param(:);");writer.newLine();
+		writer.write("else");writer.newLine();
+		writer.write("\terror('Wrong input arguments! Please read the help text to the ODE file.');");writer.newLine();
+		writer.write("end");writer.newLine();
+		writer.newLine();
 		
 	}
 	
-	private void write_initialization(StringBuilder sb){
+	private void write_initialization(BufferedWriter writer) throws IOException{
 		
 		// INITIALIZE THE STATES
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% STATES\n");
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% Using state() variable. \n");
-		sb.append("\n");
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% STATES");writer.newLine();
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% Using state() variable. ");writer.newLine();
+		writer.newLine();
 		
 		// INITIALIZE THE PARAMETES
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% PARAMETERS\n");
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% Using param() variable. \n");
-		sb.append("\n");
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% PARAMETERS");writer.newLine();
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% Using param() variable. ");writer.newLine();
+		writer.newLine();
 		
 		// INITIALIZE THE REACTIONS
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% REACTION KINETICS \n");
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("react = zeros(" + reaction.size() + ",1);\n");
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% REACTION KINETICS ");writer.newLine();
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("react = zeros(" + reaction.size() + ",1);");writer.newLine();
 		
 		for(int i=0;i<reaction.size();i++){
-			sb.append(reaction.get_renamed(i) + " = " + get_math(i) + ";\n");
+			writer.write(reaction.get_renamed(i) + " = " + get_math(i) + ";");writer.newLine();
 		}
 		
-		sb.append("\n");
+		writer.newLine();
 		
 	}
 	
-	private void write_ODE(StringBuilder sb){
+	private void write_ODE(BufferedWriter writer) throws IOException{
 		
 		// WRITE THE ODES
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% DIFFERENTIAL EQUATIONS\n");
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("output = zeros(" + state.size() + ",1);\n");
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% DIFFERENTIAL EQUATIONS");writer.newLine();
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("output = zeros(" + state.size() + ",1);");writer.newLine();
 		
 		System.out.println("  Calculating " + state.size() + " ODE ...");
 		System.out.println();
 		
 		for(int i=0;i<state.size();i++){
-			sb.append("output(" + (i+1) + ") = " + get_ODE(i) + ";\n");
+			writer.write("output(" + (i+1) + ") = " + get_ODE(i) + ";");writer.newLine();
 			if((i+1)%100==0){
 				System.out.println("  Processed " + (i+1) + "/" + state.size() + " ...");
 			}
 		}
 		System.out.println();
 		
-		sb.append("\n");
+		writer.newLine();
 		
 	}
 	
-	private void write_return_values(StringBuilder sb){
+	private void write_return_values(BufferedWriter writer) throws IOException{
 		
 		// WRITE RETURN VALUES
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% RETURN VALUES\n");
-		sb.append("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
-		sb.append("% STATE ODEs\n");
-		sb.append("% output = state_dot;\n");
-		sb.append("% return a column vector \n");
-		sb.append("end\n");
-		sb.append("\n");
-		sb.append("\n");
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% RETURN VALUES");writer.newLine();
+		writer.write("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");writer.newLine();
+		writer.write("% STATE ODEs");writer.newLine();
+		writer.write("% output = state_dot;");writer.newLine();
+		writer.write("% return a column vector ");writer.newLine();
+		writer.write("end");writer.newLine();
+		writer.newLine();
+		writer.newLine();
 		
 	}
 
