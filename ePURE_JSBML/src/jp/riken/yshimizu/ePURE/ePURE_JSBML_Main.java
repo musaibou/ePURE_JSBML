@@ -19,12 +19,12 @@ public class ePURE_JSBML_Main {
 	---------------------------------------------------------*/
 	
 	//default setting
-	String output_directory = ePURE_Header.default_output_directory;
-	String conf_file = ePURE_Header.default_conf_file;
-	String project_name = null;
-	String seq = null;
-	String initial_values_csv = ePURE_Header.default_initial_values_file;
-	String parameters_csv = ePURE_Header.default_parameters_file;
+	private String output_directory = ePURE_Header.default_output_directory;
+	private String conf_file = ePURE_Header.default_conf_file;
+	private String project_name = null;
+	private String seq = null;
+	private String initial_values_csv = ePURE_Header.default_initial_values_file;
+	private String parameters_csv = ePURE_Header.default_parameters_file;
 	
 	/*---------------------------------------------------------
 	 * main method
