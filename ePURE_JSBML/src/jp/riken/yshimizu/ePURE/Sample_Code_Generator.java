@@ -7,8 +7,7 @@ import java.io.OutputStreamWriter;
 
 public class Sample_Code_Generator {
 	
-	String xml_file_contents;
-	String project_name;
+	private String project_name;
 	
 	public Sample_Code_Generator(String project_name){
 		
