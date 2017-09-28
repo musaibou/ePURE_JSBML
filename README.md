@@ -54,3 +54,6 @@ Default concentration values of starting materials for the protein synthesis are
 #### Parameters
 Default parameters in each ODE reaction are provided by `default_parameters.csv` in `BaseFile` directory, according to the collected values from the literature in [our previous study](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777). The assignment of the value is done by regular expression in the CSV file. If you want to change the parameters please copy the file, edit settings and save with a different file name and then use option `-p` when you launch the application. When the reaction is specified by a multiple regular expressions in the csv file or the reaction is not specified by any multiple regular expressions, `NA` is assigned to the reaction with an error message in the command line. If you see this case please check the generated csv files in a collection of simulation files. We assume the units s<sup>-1</sup> for the first-order reaction and &#956;M<sup>-1</sup>s<sup>-1</sup> for the second-order reaction.
 
+#### Matlab simulation
+Unzip the collection of simulation files `[project_name]_Simulate.zip`, add a path to the obtained directory `[project_name]_Simulate`, and run `[project_name]_Sample.m` file. You can edit initial values or parameters by directly editing CSV files in `dat` directory.
+
