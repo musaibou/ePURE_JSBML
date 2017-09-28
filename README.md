@@ -29,8 +29,14 @@ Starting the program without any option displays command line information of the
     nucleotide sequence (RNA or DNA; (either -f or -s is neccessary)
 ~~~
 
-#### Project name
+#### Project name  
 Please specify a project name by `-n` option. This option is required for generating simulation files. Since the name is used for the final model name, assigning inappropriate name displays `Invalid project name` error. 
+
+#### Nucleotide sequence  
+Nucleotide sequence for the simulation can be provided with a file by `-f` option or directly to the command by `-s` option. At least `-f` or `-s` option is required. If both are provided, `-s` option has priority over `-f` option. Either DNA or RNA sequence is available but they should be started with ATG or AUG and ended with TAG, TGA, TAA, UAG, UGA, or UAA.
+
+#### Output directory  
+Output directory can be changed from the current directly to arbitrary place by `-o` option.
 
 #### Conf file  
 The conf file specifies three points for generating simulation files. If you want to change the settings, please copy the default conf file in `BaseFile` directory `default_ePURE.conf`, edit settings, and save with a different file name and then use option `-c` when you launch the application.  
@@ -38,7 +44,7 @@ The conf file specifies three points for generating simulation files. If you wan
   - Whether each amino acid is included or not.  
 The final model includes only amino acids specified with `1` in the conf file.  
   - Whether each tRNA is included or not.  
-The final model includes only tRNAs specified with `1` in the conf file. 41 kinds of tRNAs that are used in *E. coli* cells are used in the simulation. tRNA is expressed as [amino acid][anticodon seq.], *e.g.*, AlaGGC for tRNA<sup>Ala</sup><sub>GGC</sub> or fMetCAU for tRNA<sup>fMet</sup><sub>CAU</sub>.  
+The final model includes only tRNAs specified with `1` in the conf file. 41 kinds of tRNAs that are used in *E. coli* cells are used in the simulation. tRNA is expressed as [amino acid][anticodon seq.], *e.g.*, AlaGGC for tRNA<sup>Ala</sup><sub>GGC</sub> or fMetCAU for tRNA<sup>fMet</sup><sub>CAU</sub>  
   - Which codon is read by which tRNA.  
 Some codons are read by multiple tRNAs in cells. You can edit this rule by editing the conf file by adding the line such as `UUG=LeuUAA|LeuCAA`  
 
