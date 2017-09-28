@@ -36,7 +36,7 @@ Please specify a project name by `-n` option. This option is required for genera
 Nucleotide sequence for the simulation can be provided with a file by `-f` option or directly to the command by `-s` option. At least `-f` or `-s` option is required. If both are provided, `-s` option has priority over `-f` option. Either DNA or RNA sequence is available but they should be started with ATG or AUG and ended with TAG, TGA, TAA, UAG, UGA, or UAA.
 
 #### Output directory  
-Output directory can be changed from the current directly to arbitrary place by `-o` option.
+Output directory can be changed from the current directory to arbitrary place by `-o` option.
 
 #### Conf file  
 The conf file specifies three points for generating simulation files. If you want to change the settings, please copy `default_ePURE.conf` in `BaseFile` directory, edit settings, and save with a different file name and then use option `-c` when you launch the application.  
