@@ -30,7 +30,7 @@ Starting the program without any option displays command line information of the
 ~~~
 
 #### Project name  
-Please specify a project name by `-n` option. This option is required for generating simulation files. Since the name is used for the final model name, assigning inappropriate name displays `Invalid project name` error. 
+Please specify a project name by `-n` option. This option is required for generating simulation files. Since the name is used for the final model name, assigning inappropriate name returns `Invalid project name` error. If you see this case, please change the project name and try again.
 
 #### Nucleotide sequence  
 Nucleotide sequence for the simulation can be provided with a file by `-f` option or directly to the command by `-s` option. At least `-f` or `-s` option is required. If both are provided, `-s` option has priority over `-f` option. Either DNA or RNA sequence is available but they should be started with ATG or AUG and ended with TAG, TGA, TAA, UAG, UGA, or UAA.
