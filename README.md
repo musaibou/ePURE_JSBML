@@ -29,6 +29,9 @@ Starting the program without any option displays command line information of the
     nucleotide sequence (RNA or DNA; (either -f or -s is neccessary)
 ~~~
 
+#### Project name
+Please specify a project name by `-n` option. This option is required for generating simulation files. Since the name is used for the final model name, assigning inappropriate name displays `Invalid project name` error. 
+
 #### Conf file  
 The conf file specifies three points for generating simulation files. If you want to change the settings, please copy the default conf file in `BaseFile` directory `default_ePURE.conf`, edit settings, and save with a different file name and then use option `-c` when you launch the application.  
   
