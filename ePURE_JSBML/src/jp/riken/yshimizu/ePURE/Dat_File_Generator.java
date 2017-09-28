@@ -26,14 +26,12 @@ import com.opencsv.CSVParser;
 
 public class Dat_File_Generator {
 	
-	String xml_file_contents;
-	String project_name;
-	String initial_values_csv;
-	String parameters_csv;
+	private String xml_file_contents;
+	private String initial_values_csv;
+	private String parameters_csv;
 	
 	public Dat_File_Generator(ePURE_Project epure, String xml_file_contents){
 		
-		this.project_name = epure.get_project_name();
 		this.xml_file_contents = xml_file_contents;
 		this.initial_values_csv = epure.get_initial_values_csv();
 		this.parameters_csv = epure.get_parameters_csv();
@@ -262,7 +260,7 @@ public class Dat_File_Generator {
 	
 	private class Parameter_Struct {
 		
-		public int id;
+		//public int id;
 		public	String reactants;
 		public	String products;
 		public	double k; 
@@ -290,7 +288,7 @@ public class Dat_File_Generator {
 				
 				if(s.length==4){
 					Parameter_Struct ps = new Parameter_Struct();
-					ps.id = Integer.valueOf(s[0]);
+					//ps.id = Integer.valueOf(s[0]);
 					ps.reactants = s[1];
 					ps.products = s[2];
 					try{
