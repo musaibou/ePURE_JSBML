@@ -34,5 +34,6 @@ The conf file specifies three points for generating simulation files. If you wan
 The final model includes only amino acids specified with `1` in the conf file.  
   - Whether each tRNA is included or not.  
 The final model includes only tRNAs specified with `1` in the conf file.  
+41 kinds of tRNAs that are used in *E. coli* cells are used in the simulation. tRNA is expressed as [amino acid][anticodon seq.] 
 
     
