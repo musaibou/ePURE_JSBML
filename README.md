@@ -7,7 +7,8 @@ The application requires Java-installed comuputer. We tested with Java8 (1.8.0_1
 ### How to use
 ePURE__JSBML is a comand line-based application. Please start the application with the command  
 `java -jar ePURE_JSBML.jar [options...]`  
-  
+Starting the program without any option displays command line information of the application.
+
 Options shown below are available.  
 ~~~
 -c,--conffile <arg>
