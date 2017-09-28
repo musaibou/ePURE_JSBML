@@ -11,7 +11,7 @@ Please start the application with the command
 `java -jar ePURE_JSBML.jar [options...]`  
 Starting the program without any option displays command line information of the application.
 
-####Command line options  
+#### Command line options  
 ~~~
 -c,--conffile <arg>
     conf file (optional; default is "./BaseFile/default_ePURE.conf")
@@ -29,7 +29,7 @@ Starting the program without any option displays command line information of the
     nucleotide sequence (RNA or DNA; (either -f or -s is neccessary)
 ~~~
 
-####Conf file  
+#### Conf file  
 The conf file specifies three points for generating simulation files. If you want to change the settings, please copy the default conf file in `BaseFile` directory `default_ePURE.conf`, edit settings, and save with a different file name and then use option `-c` when you launch the application.  
   
   - Whether each amino acid is included or not.  
@@ -39,5 +39,5 @@ The final model includes only tRNAs specified with `1` in the conf file. 41 kind
   - Which codon is read by which tRNA.  
 Some codons are read by multiple tRNAs in cells. You can edit this rule by editing the conf file by adding the line such as `UUG=LeuUAA|LeuCAA`  
 
-####Nucleotide sequence  
+#### Nucleotide sequence  
 Nucleotide sequence
