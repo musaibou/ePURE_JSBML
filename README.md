@@ -1,5 +1,5 @@
 # ePURE_JSBML
-ePURE_JSBML generates files to run a protein synthesis simulator in [Matlab](https://www.mathworks.com/). The model for the simulator uses ODE and is based on the *E. coli*-based reconstituted in vitro translation system, [PURE system](https://www.ncbi.nlm.nih.gov/pubmed/?term=11479568). For details, please visit our [website](https://sites.google.com/view/puresimulator) or read [our published manuscript](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777).
+ePURE_JSBML generates files to run a protein synthesis simulator in [Matlab](https://www.mathworks.com/). The model for the simulator is a deterministic one using ODE and is based on the *E. coli*-based reconstituted in vitro translation system, [PURE system](https://www.ncbi.nlm.nih.gov/pubmed/?term=11479568). For details, please visit our [website](https://sites.google.com/view/puresimulator) or read [our published manuscript](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777).
 ## Download
 Please download from "Download ZIP" button and unzip it. You can also use git clone command.
 ## Requirement
