@@ -1,5 +1,5 @@
 # ePURE_JSBML
-ePURE_JSBML generates files to run a protein synthesis simulator in [Matlab](https://www.mathworks.com/). The model for the simulator uses ODE and is based on the *E. coli*-based reconstituted in vitro translation system, [PURE system](http://dx.doi.org/10.1038/90802). For details, please visit our [website](https://sites.google.com/view/puresimulator) or read [our published manuscript](http://dx.doi.org/10.1073/pnas.1615351114).
+ePURE_JSBML generates files to run a protein synthesis simulator in [Matlab](https://www.mathworks.com/). The model for the simulator uses ODE and is based on the *E. coli*-based reconstituted in vitro translation system, [PURE system](https://www.ncbi.nlm.nih.gov/pubmed/?term=11479568). For details, please visit our [website](https://sites.google.com/view/puresimulator) or read [our published manuscript](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777).
 ## Download
 Please download from "Download ZIP" button and unzip it. You can also use git clone command.
 ## Requirement
@@ -39,14 +39,14 @@ Nucleotide sequence for the simulation can be provided with a file by `-f` optio
 Output directory can be changed from the current directly to arbitrary place by `-o` option.
 
 ### Conf file  
-The conf file specifies three points for generating simulation files. If you want to change the settings, please copy the default conf file in `BaseFile` directory `default_ePURE.conf`, edit settings, and save with a different file name and then use option `-c` when you launch the application.  
+The conf file specifies three points for generating simulation files. If you want to change the settings, please copy `default_ePURE.conf` in `BaseFile` directory, edit settings, and save with a different file name and then use option `-c` when you launch the application.  
   
   - Whether each amino acid is included or not.  
 The final model includes only amino acids specified with `1` in the conf file.  
   - Whether each tRNA is included or not.  
 The final model includes only tRNAs specified with `1` in the conf file. 41 kinds of tRNAs that are used in *E. coli* cells are used in the simulation. tRNA is expressed as [amino acid][anticodon seq.], *e.g.*, AlaGGC for tRNA<sup>Ala</sup><sub>GGC</sub> or fMetCAU for tRNA<sup>fMet</sup><sub>CAU</sub>  
   - Which codon is read by which tRNA.  
-Some codons are read by multiple tRNAs in cells. You can edit this rule by editing the conf file by describing the line as *e.g.* `UUG=LeuUAA|LeuCAA`  
+Some codons are read by multiple tRNAs in cells. You can edit this rule by editing the conf file by describing the line as *e.g.*, `UUG=LeuUAA|LeuCAA`  
 
 ### Initial values
-sddfsdf
+The default concentration values of starting materials for the protein synthesis are provided by `default_initial_values.csv` in `BaseFile` directory, according to the [optimized PURE system](https://www.ncbi.nlm.nih.gov/pubmed/?term=24880499). If you want to change the concentration please copy the file, edit settings, and save with a different file name and then use option `-i` when you launch the application. The value `0` is assigned to the species not specified with the initial values csv file. We assume the unit as &#956;M
