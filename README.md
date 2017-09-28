@@ -3,13 +3,13 @@ ePURE_JSBML generates files to run a protein synthesis simulator in Matlab. The 
 ### Download
 Please download from "Download ZIP" button and unzip it. You can also use git clone command.
 ### Requirement
-The application requires Java-installed comuputer. We tested with Java8 (1.8.0_121) on Windows 8 or Windows 10.
+The application requires Java-installed comuputer. We tested with Java8 (1.8.0_121) on Windows 8,1 or Windows 10.
 ### How to use
 ePURE__JSBML is a comand line-based application. Please start the application with the command  
 `java -jar ePURE_JSBML.jar [options...]`  
 Starting the program without any option displays command line information of the application.
 
-Options shown below are available.  
+- Options shown below are available.  
 ~~~
 -c,--conffile <arg>
     conf file (optional; default is "./BaseFile/default_ePURE.conf")
@@ -26,3 +26,4 @@ Options shown below are available.
 -s,--sequence <arg>
     nucleotide sequence (RNA or DNA; (either -f or -s is neccessary)
 ~~~
+
