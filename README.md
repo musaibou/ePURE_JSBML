@@ -6,4 +6,4 @@ Please download from "Download ZIP" button and unzip it. You can also use git cl
 The application requires Java-installed comuputer. We tested with Java8 (1.8.0_121) on Windows 8 or Windows 10.
 ### How to use
 ePURE__JSBML is a comand line-based application.
-Please start the application with 'java -jar ePURE_JSBML.jar' 
+Please start the application with `java -jar ePURE_JSBML.jar`
