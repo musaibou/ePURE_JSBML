@@ -68,7 +68,7 @@ java -jar ePURE_JSBML.jar -n MGG_all -s ATGGGTGGTTAA
 ~~~
 - A command generates files for synthesizing GFP
 ~~~
-java -jar ePURE_JSBML.jar -f ./example/GFP.txt
+java -jar ePURE_JSBML.jar -n GFP -f ./example/GFP.txt
 ~~~
 
 ## Acknowledgement
