@@ -72,7 +72,7 @@ java -jar ePURE_JSBML.jar -f ./example/GFP.txt
 ~~~
 
 ## Acknowledgement
-ePURE_JSBML uses a variety of third-party software libraries. They are ditributed under the license statements of each software library, which is included in the ePURE_JSBML subdirectory /licenses. We'd like to thank that these software could be used for the development of ePURE_JSBML.
+ePURE_JSBML uses a variety of third-party software libraries. They are ditributed along with ePURE_JSBML under the license statements of each software library, which is included in the ePURE_JSBML subdirectory /licenses. We'd like to thank that these software could be used for the development of ePURE_JSBML.
   - JSBML http://sbml.org/Software/JSBML  
   - opencsv http://opencsv.sourceforge.net
   - Apache Commons libraries (commons cli, commons beanutils, and commons lang) https://commons.apache.org
