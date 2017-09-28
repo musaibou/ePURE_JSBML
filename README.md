@@ -11,7 +11,7 @@ Please start the application with the command
 `java -jar ePURE_JSBML.jar [options...]`  
 Starting the program without any option displays command line information of the application.
 
-#### Command line options  
+### Command line options  
 ~~~
 -c,--conffile <arg>
     conf file (optional; default is "./BaseFile/default_ePURE.conf")
@@ -29,16 +29,16 @@ Starting the program without any option displays command line information of the
     nucleotide sequence (RNA or DNA; (either -f or -s is neccessary)
 ~~~
 
-#### Project name  
+### Project name  
 Please specify a project name by `-n` option. This option is required for generating simulation files. Since the name is used for the final model name, assigning inappropriate name displays `Invalid project name` error. 
 
-#### Nucleotide sequence  
+### Nucleotide sequence  
 Nucleotide sequence for the simulation can be provided with a file by `-f` option or directly to the command by `-s` option. At least `-f` or `-s` option is required. If both are provided, `-s` option has priority over `-f` option. Either DNA or RNA sequence is available but they should be started with ATG or AUG and ended with TAG, TGA, TAA, UAG, UGA, or UAA.
 
-#### Output directory  
+### Output directory  
 Output directory can be changed from the current directly to arbitrary place by `-o` option.
 
-#### Conf file  
+### Conf file  
 The conf file specifies three points for generating simulation files. If you want to change the settings, please copy the default conf file in `BaseFile` directory `default_ePURE.conf`, edit settings, and save with a different file name and then use option `-c` when you launch the application.  
   
   - Whether each amino acid is included or not.  
@@ -48,5 +48,5 @@ The final model includes only tRNAs specified with `1` in the conf file. 41 kind
   - Which codon is read by which tRNA.  
 Some codons are read by multiple tRNAs in cells. You can edit this rule by editing the conf file by describing the line as *e.g.* `UUG=LeuUAA|LeuCAA`  
 
-#### Initial values
+### Initial values
 sddfsdf
