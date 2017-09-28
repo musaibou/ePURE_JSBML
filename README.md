@@ -58,7 +58,7 @@ Default parameters in each ODE reaction are provided by `default_parameters.csv`
 Unzip the collection of simulation files `[project_name]_Simulate.zip`, add a path to the obtained directory `[project_name]_Simulate`, and run `[project_name]_Sample.m` file. You can edit initial values or parameters by directly editing CSV files in `dat` directory.
 
 ## Example commands
-~~~
-java -jar ePURE_JSBML.jar -n MGG_PNAS -f ./example/MGGseq.txt -c ./example/MGG_PNAS.conf
-~~~
-  generates files for synthesizing formyl-Met-Gly-Gly tripeptide (fMGG) in the presence of Met and Gly, which has been studied in [our previous study](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777).
+- A command generates files for synthesizing formyl-Met-Gly-Gly tripeptide (fMGG) in the presence of Met and Gly, which has been studied in [our previous study](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777).
+`java -jar ePURE_JSBML.jar -n MGG_PNAS -f ./example/MGGseq.txt -c ./example/MGG_PNAS.conf`
+- A command generates files for synthesizing fomyl-Met-Gly-Gly tripeptide (fMGG) in the presence of all 20 amino acids and 41 tRNAs
+`java -jar ePURE_JSBML.jar -n MGG_all -s ATGGGTGGTTAA`
