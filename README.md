@@ -52,9 +52,13 @@ Some codons are read by multiple tRNAs in cells. You can edit this rule by editi
 Default concentration values of starting materials for the protein synthesis are provided by `default_initial_values.csv` in `BaseFile` directory, according to the [optimized PURE system](https://www.ncbi.nlm.nih.gov/pubmed/?term=24880499). If you want to change the concentration please copy the file, edit settings, and save with a different file name and then use option `-i` when you launch the application. The value `0` is assigned to the species not specified with the initial values csv file. We assume the units as &#956;M
 
 #### Parameters
-Default parameters in each ODE reaction are provided by `default_parameters.csv` in `BaseFile` directory, according to the collected values from the literature in [our previous study](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777). The assignment of the value is done by regular expression in the CSV file. If you want to change the parameters please copy the file, edit settings and save with a different file name and then use option `-p` when you launch the application. When the reaction is specified by a multiple regular expressions in the csv file or the reaction is not specified by any regular expressions, `NA` is assigned to the reaction with the message in the command line. If you see this case please check the generated csv files in a collection of simulation files. We assume the units s<sup>-1</sup> for the first-order reaction and &#956;M<sup>-1</sup>s<sup>-1</sup> for the second-order reaction.
+Default parameters in each ODE reaction are provided by `default_parameters.csv` in `BaseFile` directory, according to the collected values from the literature in [our previous study](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777). The assignment of the value is done by regular expression in the CSV file. If you want to change the parameters please copy the file, edit settings and save with a different file name and then use option `-p` when you launch the application. When the reaction is specified by a multiple regular expressions in the csv file or the reaction is not specified by any regular expressions, `NA` is assigned to the reaction with the message in the command line. If you see this case please check the generated csv files in a zipped simulation files. We assume the units s<sup>-1</sup> for the first-order reaction and &#956;M<sup>-1</sup>s<sup>-1</sup> for the second-order reaction.
 
 #### Matlab simulation
 Unzip the collection of simulation files `[project_name]_Simulate.zip`, add a path to the obtained directory `[project_name]_Simulate`, and run `[project_name]_Sample.m` file. You can edit initial values or parameters by directly editing CSV files in `dat` directory.
 
-## Tests
+## Example commands
+~~~
+java -jar ePURE_JSBML.jar -n MGG_PNAS -f ./example/MGGseq.txt -c ./example/MGG_PNAS.conf
+~~~
+  generates files for synthesizing formyl-Met-Gly-Gly tripeptide (fMGG) in the presence of Met and Gly, which has been studied in [our previous study](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777).
