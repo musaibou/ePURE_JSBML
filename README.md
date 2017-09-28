@@ -10,11 +10,18 @@ ePURE__JSBML is a comand line-based application. Please start the application wi
   
 Options shown below are available.  
 ~~~
--c,--conffile <arg>: conf file (optional; default is "./BaseFile/default_ePURE.conf")
--f,--seqfile <arg>: nuleotide sequence file(RNA or DNA; either -f or -s is neccessary)
- -i,--inivaluescsv <arg>: CSV file name for initial values (optional; default is "./BaseFile/default_initial_values.csv")
- -n,--name <arg>: project name (required)
- -o,--outputdir <arg>: output directory (optional; default is ./)
- -p,--parameterscsv <arg> :CSV file name for parameters (optional; default is "./BaseFile/default_parameters.csv")
- -s,--sequence <arg>: nucleotide sequence (RNA or DNA; (either -f or -s is neccessary)
+-c,--conffile <arg>
+    conf file (optional; default is "./BaseFile/default_ePURE.conf")
+-f,--seqfile <arg>
+    nuleotide sequence file(RNA or DNA; either -f or -s is neccessary)
+-i,--inivaluescsv <arg>
+    CSV file name for initial values (optional; default is "./BaseFile/default_initial_values.csv")
+-n,--name <arg>
+    project name (required)
+-o,--outputdir <arg>
+    output directory (optional; default is ./)
+-p,--parameterscsv <arg>
+    CSV file name for parameters (optional; default is "./BaseFile/default_parameters.csv")
+-s,--sequence <arg>
+    nucleotide sequence (RNA or DNA; (either -f or -s is neccessary)
 ~~~
