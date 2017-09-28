@@ -5,11 +5,11 @@ Please download from "Download ZIP" button and unzip it. You can also use git cl
 ### Requirement
 The application requires Java-installed comuputer. We tested with Java8 (1.8.0_121) on Windows 8 or Windows 10.
 ### How to use
-ePURE__JSBML is a comand line-based application.
-Please start the application with the command
-`java -jar ePURE_JSBML.jar [options...]`
-
-Options showns belos are available.
+ePURE__JSBML is a comand line-based application.  
+Please start the application with the command  
+`java -jar ePURE_JSBML.jar [options...]`  
+  
+Options showns below are available.  
     -c,--conffile <arg>: conf file (optional; default is "./BaseFile/default_ePURE.conf")
     -f,--seqfile <arg>:\t\t\t          nuleotide sequence file(RNA or DNA; either -f
                             or -s is neccessary)
