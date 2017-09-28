@@ -1,2 +1,2 @@
 # ePURE_JSBML
-Tools to develop a simulator for in vitro biological reaction networks, e.g., a reconstituted cell-free protein synthesis system
+ePURE_JSBML generates files to run a protein synthesis simulator in Matlab. The model for the simulator uses ODE and is based on the *E. coli*-based reconstituted in vitro translation system, [PURE system](http://dx.doi.org/10.1038/90802). For details, please visit our [website](https://sites.google.com/view/puresimulator) or read [our published manuscript](http://dx.doi.org/10.1073/pnas.1615351114).
