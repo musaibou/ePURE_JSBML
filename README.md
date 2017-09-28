@@ -27,9 +27,8 @@ Starting the program without any option displays command line information of the
     nucleotide sequence (RNA or DNA; (either -f or -s is neccessary)
 ~~~
 
-- Conf file
-
-The conf file specifies three points for generating simulation files. If you want to change the settings, please copy the default conf file in `BaseFile` directory `default_ePURE.conf`, edit settings, and save with a different file name and then use option `-c` when you launch the application.
+- Conf file  
+The conf file specifies three points for generating simulation files. If you want to change the settings, please copy the default conf file in `BaseFile` directory `default_ePURE.conf`, edit settings, and save with a different file name and then use option `-c` when you launch the application.  
 1. Whether each amino acid is included or not.  
 The final model includes only amino acids specified with 1 in the conf file.  
 2. Whether each tRNA is included or not.  
