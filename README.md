@@ -30,6 +30,9 @@ Starting the program without any option displays command line information of the
 - Conf file
 
 The conf file specifies three points for generating simulation files. If you want to change the settings, please copy the default conf file in `BaseFile` directory `default_ePURE.conf`, edit settings, and save with a different file name and then use option `-c` when you launch the application.
-    - Whether each amino acid is included or not.
-    If 0 is provided for specified amino
+1. Whether each amino acid is included or not.  
+The final model includes only amino acids specified with 1 in the conf file.  
+2. Whether each tRNA is included or not.  
+The final model includes only tRNAs specified with 1 in the conf file.  
+
     
