@@ -6,4 +6,10 @@ Mailto: yshimizu@riken.jp
 URL: https://github.com/musaibou/ePURE_JSBML
 ------------------------------------------------------------
 
-The Usage is described in the above website.
+The Usage is described in the website above.
+
+
+
+History:
+
+v.0.1, First version is released. 29th, Sep., 2017
