@@ -6,4 +6,4 @@ Mailto: yshimizu@riken.jp
 URL: https://github.com/musaibou/ePURE_JSBML
 ------------------------------------------------------------
 
-Usage is described in the above website.
+The Usage is described in the above website.
