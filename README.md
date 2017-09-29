@@ -5,7 +5,7 @@ Please download from "Download ZIP" button and unzip it. You can also use git cl
 ## Requirement
 The application requires Java Runtime Environment (JRE)-installed computer. We tested with Java8 (1.8.0_121) on Windows 8.1 or Windows 10.
 ## How to use
-ePURE__JSBML is a comand line-based application. Two zip files are generated: One is a collection of separated sub-models that can be visualized by [CellDesigner](http://www.celldesigner.org/). Another is a collection of simulation files ready for use in Matlab.  
+ePURE__JSBML is a command line-based application. Two zip files are generated: One is a collection of separated sub-models that can be visualized by [CellDesigner](http://www.celldesigner.org/). Another is a collection of simulation files ready for use in Matlab.  
 
 Please start the application with the command  
 `java -jar ePURE_JSBML.jar [options...]`  
@@ -72,7 +72,7 @@ java -jar ePURE_JSBML.jar -n GFP -f ./example/GFP.txt
 ~~~
 
 ## Acknowledgement
-ePURE_JSBML uses a variety of third-party software libraries. They are ditributed along with ePURE_JSBML under the license statements of each software library, which is included in the ePURE_JSBML subdirectory /licenses. We'd like to thank that these software could be used for the development of ePURE_JSBML.
+ePURE_JSBML uses a variety of third-party software libraries. They are distributed along with ePURE_JSBML under the license statements of each software library, which is included in the ePURE_JSBML subdirectory /licenses. We'd like to thank that these software could be used for the development of ePURE_JSBML.
   - JSBML http://sbml.org/Software/JSBML  
   - opencsv http://opencsv.sourceforge.net
   - Apache Commons libraries (commons cli, commons beanutils, and commons lang) https://commons.apache.org
