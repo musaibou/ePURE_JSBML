@@ -44,7 +44,7 @@ The conf file specifies three points for generating simulation files. If you wan
   - Whether each amino acid is included or not.  
 The final model includes only amino acids specified with `1` in the conf file.  
   - Whether each tRNA is included or not.  
-The final model includes only tRNAs specified with `1` in the conf file. 41 kinds of tRNAs that are used in *E. coli* cells are used in the simulation. tRNA name is expressed as [amino acid][anticodon seq.], *e.g.*, AlaGGC for tRNA<sup>Ala</sup><sub>GGC</sub> or fMetCAU for tRNA<sup>fMet</sup><sub>CAU</sub>  
+The final model includes only tRNAs specified with `1` in the conf file. 41 kinds of tRNAs that are used in *E. coli* cells are used in the simulation. tRNA name is expressed as `[amino acid][anticodon seq.]`, *e.g.*, `AlaGGC` for tRNA<sup>Ala</sup><sub>GGC</sub> or `fMetCAU `for tRNA<sup>fMet</sup><sub>CAU</sub>  
   - Which codon is read by which tRNA.  
 Some codons are read by multiple tRNAs in cells. You can edit this rule by editing the conf file by describing the line as *e.g.*, `UUG=LeuUAA|LeuCAA`  
 
