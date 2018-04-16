@@ -62,9 +62,9 @@ Unzip the collection of simulation files `[project_name]_Simulate.zip`, add a pa
 ~~~
 java -jar ePURE_JSBML.jar -n MGG_PNAS -f ./example/MGGseq.txt -i ./example/PNAS_initial_values.csv -c ./example/MGG_PNAS.conf
 ~~~
-- A command generates files for synthesizing fomyl-Met-Gly-Gly tripeptide (fMGG) in the presence of all 20 amino acids and 41 tRNAs  
+- A command generates files for synthesizing fomyl-Met-Asn-Ser-Asp-Ser pentapeptide (fMNSDS) in the presence of all 20 amino acids and 41 tRNAs  
 ~~~
-java -jar ePURE_JSBML.jar -n MGG_all -s ATGGGTGGTTAA
+java -jar ePURE_JSBML.jar -n fMNSDS_all -s ATGAATAGTGACTCTTGA
 ~~~
 - A command generates files for synthesizing GFP
 ~~~
