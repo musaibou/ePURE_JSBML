@@ -60,7 +60,7 @@ Unzip the collection of simulation files `[project_name]_Simulate.zip`, add a pa
 ## Example commands
 - A command generates files for synthesizing formyl-Met-Gly-Gly tripeptide (fMGG) in the presence of Met and Gly, which has been studied in [our previous study](https://www.ncbi.nlm.nih.gov/pubmed/?term=28167777).
 ~~~
-java -jar ePURE_JSBML.jar -n MGG_PNAS -f ./example/MGGseq.txt -c ./example/MGG_PNAS.conf
+java -jar ePURE_JSBML.jar -n MGG_PNAS -f ./example/MGGseq.txt -i ./example/PNAS_initial_values.csv -c ./example/MGG_PNAS.conf
 ~~~
 - A command generates files for synthesizing fomyl-Met-Gly-Gly tripeptide (fMGG) in the presence of all 20 amino acids and 41 tRNAs  
 ~~~
